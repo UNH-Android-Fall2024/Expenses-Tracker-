@@ -45,9 +45,9 @@
 
             <EditText
                 android:id="@+id/editTextUserName"
-                android:layout_width="407dp"
-                android:layout_height="47dp"
-                android:layout_marginTop="40dp"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="36dp"
                 android:background="@color/edit_text_background"
                 android:drawableStart="@drawable/baseline_email_24"
                 android:hint="Email or UserName"
@@ -104,6 +104,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="@string/new_user_create_account"
+                android:clickable="true"
+                android:focusable="true"
                 android:textColor="@color/app_theme"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
