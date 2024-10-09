@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Expense_Tracker</string>
+    <string name="expense_tracker_app">Expense Tracker App</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="login">Login</string>
+    <string name="new_user_create_account">New User? Create Account</string>
 </resources>
