@@ -8,4 +8,7 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="password_Newuser">Password</string>
     <string name="first_name">First Name</string>
+    <string name="enter_email_id">Enter Email ID</string>
+    <string name="enter_new_password">Enter New Password</string>
+    <string name="enter_the_password_again">Enter the Password Again</string>
 </resources>

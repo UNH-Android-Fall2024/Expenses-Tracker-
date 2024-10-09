@@ -19,8 +19,15 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         val createAccountTextView = findViewById<TextView>(R.id.textViewCreateAccount)
+
+        val resetPassword = findViewById<TextView>(R.id.textViewForgotPassword)
         createAccountTextView.setOnClickListener {
             val intent = Intent(this, NewUserRegister::class.java)
+            startActivity(intent)
+        }
+
+        resetPassword.setOnClickListener {
+            val intent = Intent(this, PasswordReset::class.java)
             startActivity(intent)
         }
     }
