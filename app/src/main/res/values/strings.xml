@@ -4,4 +4,8 @@
     <string name="forgot_password">Forgot Password?</string>
     <string name="login">Login</string>
     <string name="new_user_create_account">New User? Create Account</string>
+    <string name="expense_tracker_app_newregister">Expense Tracker App</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="password_Newuser">Password</string>
+    <string name="first_name">First Name</string>
 </resources>
