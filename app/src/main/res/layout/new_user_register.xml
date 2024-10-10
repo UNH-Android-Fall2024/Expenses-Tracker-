@@ -46,7 +46,7 @@
                 android:id="@+id/editTextFirstName"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:layout_marginTop="48dp"
+                android:layout_marginTop="32dp"
                 android:background="@color/edit_text_background"
                 android:hint="@string/first_name"
                 android:inputType="text"
@@ -61,7 +61,7 @@
                 android:id="@+id/editTextLastName"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:layout_marginTop="36dp"
+                android:layout_marginTop="28dp"
                 android:background="@color/edit_text_background"
                 android:hint="Last Name"
                 android:inputType="text"
@@ -131,6 +131,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editTextConfirmPassword"
                 app:layout_constraintVertical_bias="0.147"/>
+            <TextView
+                android:id="@+id/backtologin1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/back_to_loginpage"
+                android:clickable="true"
+                android:focusable="true"
+                android:textColor="@color/app_theme"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/button" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 

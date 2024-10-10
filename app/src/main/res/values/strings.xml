@@ -11,4 +11,6 @@
     <string name="enter_email_id">Enter Email ID</string>
     <string name="enter_new_password">Enter New Password</string>
     <string name="enter_the_password_again">Enter the Password Again</string>
+    <string name="back_to_loginpage">Back To LoginPage</string>
+    <string name="reset_the_password">Reset the Password</string>
 </resources>
