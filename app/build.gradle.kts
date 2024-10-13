@@ -2,13 +2,14 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("com.google.gms.google-services")
-
 }
 
 android {
     namespace = "com.unh.expense_tracker"
     compileSdk = 34
-
+   buildFeatures {
+       viewBinding = true
+   }
     defaultConfig {
         applicationId = "com.unh.expense_tracker"
         minSdk = 34
@@ -45,6 +46,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.firebase.firestore.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
