@@ -47,7 +47,6 @@ class NewUserRegister : AppCompatActivity() {
             "lastName" to lastName.text.toString(),
             "emaild" to emaild.text.toString(),
             "password" to password.text.toString(),
-            "confirmPass" to confirmPass.text.toString(),
 
         )
         db.collection( "App_UsersCredentials")
@@ -62,7 +61,7 @@ class NewUserRegister : AppCompatActivity() {
         lastName.setText("")
         emaild.setText("")
         password.setText("")
-        confirmPass.setText("")
+
     }
 
 }
