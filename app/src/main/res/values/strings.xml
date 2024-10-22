@@ -13,4 +13,8 @@
     <string name="enter_the_password_again">Enter the Password Again</string>
     <string name="back_to_loginpage">Back To LoginPage</string>
     <string name="reset_the_password">Reset the Password</string>
+    <string name="title_activity_main2">MainActivity2</string>
+    <string name="title_activity">Activity</string>
+    <string name="title_splitshare">SplitShare</string>
+    <string name="title_account">Account</string>
 </resources>

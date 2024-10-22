@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_activity">
+
+    <fragment
+        android:id="@+id/navigation_activity"
+        android:name="com.unh.expense_tracker.ui.activity.ActivityFragment"
+        android:label="@string/title_activity"
+        tools:layout="@layout/fragment_activity" />
+
+    <fragment
+        android:id="@+id/navigation_splitshare"
+        android:name="com.unh.expense_tracker.ui.splitshare.SplitshareFragment"
+        android:label="@string/title_splitshare"
+        tools:layout="@layout/fragment_splitshare" />
+
+    <fragment
+        android:id="@+id/navigation_account"
+        android:name="com.unh.expense_tracker.ui.account.AccountFragment"
+        android:label="@string/title_account"
+        tools:layout="@layout/fragment_account" />
+</navigation>
