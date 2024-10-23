@@ -17,4 +17,8 @@
     <string name="title_activity">Activity</string>
     <string name="title_splitshare">SplitShare</string>
     <string name="title_account">Account</string>
+    <string name="expense_tracker">Expense Tracker</string>
+    <string name="today">Today</string>
+    <string name="this_month">This Month</string>
+    <string name="this_year">This Year</string>
 </resources>

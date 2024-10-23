@@ -1,12 +1,14 @@
 package com.unh.expense_tracker.ui.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.unh.expense_tracker.databinding.FragmentActivityBinding
 
 
@@ -29,13 +31,18 @@ class ActivityFragment : Fragment() {
         _binding = FragmentActivityBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textHome
+
         activityViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+
         }
         return root
     }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.fabAdd.setOnClickListener {
 
+        }
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
