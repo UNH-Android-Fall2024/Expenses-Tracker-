@@ -40,7 +40,7 @@
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/today"
+            android:text="@string/Transactions"
             android:textColor="@color/white"
             app:strokeColor="@color/black"
             app:backgroundTint="@color/black"
@@ -52,7 +52,7 @@
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/this_month"
+            android:text="@string/Limit"
             android:textColor="@color/white"
             app:strokeColor="@color/black"
             app:backgroundTint="@color/black"
@@ -65,7 +65,7 @@
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/this_year"
+            android:text="@string/goal"
             android:textColor="@color/white"
             app:strokeColor="@color/black"
             app:backgroundTint="@color/black"
