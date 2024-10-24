@@ -18,7 +18,7 @@
     <string name="title_splitshare">SplitShare</string>
     <string name="title_account">Account</string>
     <string name="expense_tracker">Expense Tracker</string>
-    <string name="Transactions">Transactions</string>
-    <string name="Limit">Set Expense Limit</string>
-    <string name="goal">Set Goal</string>
+    <string name="Transactions">All \nTransactions</string>
+    <string name="Limit">Set \nExpense Limit</string>
+    <string name="goal">Set \nGoal</string>
 </resources>

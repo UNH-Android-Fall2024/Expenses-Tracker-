@@ -34,46 +34,41 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp">
 
-        <!-- Today Button -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_today"
+        android:id="@+id/btn_today"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Transactions"
+        android:textColor="@color/white"
+        app:strokeColor="@color/black"
+        app:backgroundTint="@color/black"
+        android:layout_marginEnd="8dp"
+        android:padding="8dp" />
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Transactions"
-            android:textColor="@color/white"
-            app:strokeColor="@color/black"
-            app:backgroundTint="@color/black"
-            android:padding="8dp" />
-
-        <!-- This Month Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_month"
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/Limit"
             android:textColor="@color/white"
             app:strokeColor="@color/black"
             app:backgroundTint="@color/black"
-            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:padding="8dp" />
 
-        <!-- This Year Button -->
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_year"
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/goal"
             android:textColor="@color/white"
             app:strokeColor="@color/black"
             app:backgroundTint="@color/black"
-            android:layout_marginStart="8dp"
             android:padding="8dp" />
     </LinearLayout>
 
-    <!-- Spend So Far Card -->
+
     <androidx.cardview.widget.CardView
         android:id="@+id/card_spend_so_far"
         android:layout_width="match_parent"
