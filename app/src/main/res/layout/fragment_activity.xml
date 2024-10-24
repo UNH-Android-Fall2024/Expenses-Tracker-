@@ -97,32 +97,27 @@
             android:textAlignment="center"/>
     </androidx.cardview.widget.CardView>
 
-    <!-- Current Date Display -->
     <TextView
         android:id="@+id/text_current_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Today, 16 October 2024"
         android:textSize="14sp"
-        android:textColor="@color/darkergray"
+        android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/card_spend_so_far"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp" />
-
-    <!-- Empty State Image -->
+        android:layout_marginTop="16dp"/>
+    <!-- android:text="Today, 16 October 2024" -->
     <ImageView
         android:id="@+id/empty_state_image"
         android:layout_width="200dp"
         android:layout_height="200dp"
-
         android:src="@drawable/baseline_money_24"
         app:layout_constraintTop_toBottomOf="@id/text_current_date"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="32dp" />
 
-    <!-- No Expense Text -->
     <TextView
         android:id="@+id/no_expense_text"
         android:layout_width="wrap_content"
@@ -135,7 +130,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="8dp" />
 
-    <!-- Floating Action Button -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add"
         android:layout_width="wrap_content"
