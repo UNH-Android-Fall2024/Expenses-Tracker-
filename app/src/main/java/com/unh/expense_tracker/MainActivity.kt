@@ -3,6 +3,7 @@ package com.unh.expense_tracker
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Window
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.hide()
 
         val createAccountTextView = findViewById<TextView>(R.id.textViewCreateAccount)
         val resetPassword = findViewById<TextView>(R.id.textViewForgotPassword)

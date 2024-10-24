@@ -31,9 +31,10 @@ class ActivityFragment : Fragment() {
         _binding = FragmentActivityBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-
+        //val textView: TextView = binding.textTitle
         activityViewModel.text.observe(viewLifecycleOwner) {
-
+         //   textView.text = it
+          //  Log.d("test", it)
         }
         return root
     }
