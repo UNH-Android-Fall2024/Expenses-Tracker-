@@ -19,6 +19,7 @@ class NewUserRegister : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = NewUserRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.hide()
 
         val backtologinpage = findViewById<TextView>(R.id.backtologin1)
         backtologinpage.setOnClickListener {

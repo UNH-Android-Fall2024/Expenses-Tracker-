@@ -17,6 +17,7 @@ class PasswordReset : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = PasswordResetBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.hide()
 
         val backtologinpage2 = findViewById<TextView>(R.id.backtologin2)
         backtologinpage2.setOnClickListener {
