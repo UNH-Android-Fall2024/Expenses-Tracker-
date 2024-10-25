@@ -13,7 +13,7 @@
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add New Expense"
+        android:text="@string/add_new_expense"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
@@ -25,7 +25,7 @@
         android:id="@+id/tvSubtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Enter the detail of your expense to help you to track your spending"
+        android:text="@string/enter_the_detail_of_your_expense_to_help_you_to_track_your_spending"
         android:textSize="14sp"
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +37,7 @@
         android:id="@+id/tvEnterAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enter Amount"
+        android:text="@string/enter_amount"
         android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@id/tvSubtitle"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +59,7 @@
         android:id="@+id/tvDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Description"
+        android:text="@string/description"
         android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@id/etAmount"
         app:layout_constraintStart_toStartOf="parent"
@@ -75,12 +75,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="4dp" />
 
-    <!-- Category -->
     <TextView
         android:id="@+id/tvCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Category"
+        android:text="@string/category"
         android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@id/etDescription"
         app:layout_constraintStart_toStartOf="parent"
@@ -100,7 +99,7 @@
 
         <ImageView
             android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_height="32dp"
             android:src="@drawable/baseline_category_24" />
 
         <EditText

@@ -21,4 +21,9 @@
     <string name="Transactions">All \nTransactions</string>
     <string name="Limit">Set \nExpense Limit</string>
     <string name="goal">Set \nGoal</string>
+    <string name="add_new_expense">Add New Expense</string>
+    <string name="enter_the_detail_of_your_expense_to_help_you_to_track_your_spending">Enter the detail of your expense to help you to track your spending</string>
+    <string name="enter_amount">Enter Amount</string>
+    <string name="description">Description</string>
+    <string name="category">Category</string>
 </resources>
