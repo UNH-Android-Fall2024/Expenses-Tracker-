@@ -3,13 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_activity">
+    app:startDestination="@id/navigation_activity">
 
     <fragment
         android:id="@+id/navigation_activity"
         android:name="com.unh.expense_tracker.ui.activity.ActivityFragment"
         android:label="@string/title_activity"
-        tools:layout="@layout/fragment_activity" />
+        tools:layout="@layout/fragment_activity" >
+        <action
+            android:id="@+id/action_navigation_activity_to_addExpenseFragment"
+            app:destination="@id/addExpenseFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_splitshare"
@@ -22,5 +26,14 @@
         android:name="com.unh.expense_tracker.ui.account.AccountFragment"
         android:label="@string/title_account"
         tools:layout="@layout/fragment_account" />
+    <fragment
+        android:id="@+id/addExpenseFragment"
+        android:name="com.unh.expense_tracker.ui.activity.AddExpenseFragment"
+        android:label="AddExpenseFragment"
+        tools:layout="@layout/fragment_addexpense">
+        <action
+            android:id="@+id/action_addExpenseFragment_to_navigation_activity"
+            app:destination="@id/navigation_activity" />
+    </fragment>
 
 </navigation>

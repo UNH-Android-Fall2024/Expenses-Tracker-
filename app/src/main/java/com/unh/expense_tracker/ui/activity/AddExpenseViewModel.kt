@@ -1,4 +1,6 @@
 package com.unh.expense_tracker.ui.activity
 
-class AddExpenseViewModel {
+import androidx.lifecycle.ViewModel
+
+class AddExpenseViewModel  {
 }

@@ -52,7 +52,7 @@ class ActivityFragment : Fragment() {
 
         binding.textCurrentDate.text = formattedDate
         binding.fabAdd.setOnClickListener {
-
+           findNavController().navigate(ActivityFragmentDirections.actionNavigationActivityToAddExpenseFragment())
         }
     }
     override fun onDestroyView() {
