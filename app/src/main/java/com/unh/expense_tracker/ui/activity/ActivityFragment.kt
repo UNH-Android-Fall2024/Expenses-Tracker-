@@ -13,11 +13,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.unh.expense_tracker.databinding.FragmentActivityBinding
 import java.util.Locale
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 
 class ActivityFragment : Fragment() {
 
     private var _binding: FragmentActivityBinding? = null
+    private val db = Firebase.firestore
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -44,17 +47,43 @@ class ActivityFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Current Date and Day
         val currentDate = Calendar.getInstance().time
         val dateFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
         val formattedDate = "Today, ${dateFormat.format(currentDate)}"
 
+        loadTotalExpense()
 
         binding.textCurrentDate.text = formattedDate
         binding.fabAdd.setOnClickListener {
            findNavController().navigate(ActivityFragmentDirections.actionNavigationActivityToAddExpenseFragment())
         }
     }
+
+    private fun loadTotalExpense() {
+        val userEmail = "h@gmail.com"
+        db.collection("user_expenses")
+            .whereEqualTo("email", userEmail)
+            .addSnapshotListener { snapshots, error ->
+                if (error != null) {
+                    Log.e("ActivityFragment", "Listen failed.", error)
+                    return@addSnapshotListener
+                }
+
+                var totalExpense = 0.0
+                if (snapshots != null && !snapshots.isEmpty) {
+                    for (document in snapshots.documents) {
+                        val expenseString = document.getString("amount")
+                        val expense = expenseString?.toDoubleOrNull() ?: 0.0
+                        totalExpense += expense
+                    }
+                }
+
+                val formattedTotal = String.format("$%.2f", totalExpense)
+                binding.spendSoFarText.text = "Amount Spent this Month\n$formattedTotal"
+            }
+    }
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
