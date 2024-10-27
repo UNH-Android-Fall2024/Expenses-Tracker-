@@ -67,7 +67,7 @@ class AddExpenseFragment : Fragment() {
             month,
             day
         )
-
+        datePickerDialog.datePicker.maxDate = calendar.timeInMillis
         datePickerDialog.show()
     }
 
