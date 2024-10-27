@@ -72,19 +72,23 @@ class AddExpenseFragment : Fragment() {
     }
 
     private fun saveaddExpenseToFirestore() {
-        val amount = binding.etAmount.text.toString().trim()
+        val amountstring = binding.etAmount.text.toString().trim()
         val description = binding.etDescription.text.toString().trim()
         val category = binding.etCategory.text.toString().trim()
         val date = binding.tvSelectedDate.text.toString().trim()
         val email = "h@gmail.com"
 
-        if (amount.isEmpty() || description.isEmpty() || category.isEmpty() || date.isEmpty()) {
+        if ( description.isEmpty() || category.isEmpty() || date.isEmpty()) {
             Toast.makeText(requireContext(), "Please fill in all fields.", Toast.LENGTH_SHORT).show()
             return
         }
-
+        val amount = amountstring.toDoubleOrNull()
+        if (amount == null || amount <= 0) {
+            Toast.makeText(requireContext(), "Enter an amount greater than 0.", Toast.LENGTH_SHORT).show()
+            return
+        }
         val expense = hashMapOf(
-            "amount" to amount,
+            "amount" to amountstring,
             "description" to description,
             "category" to category,
             "date" to date,
