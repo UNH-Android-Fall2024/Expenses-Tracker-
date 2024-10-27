@@ -82,9 +82,6 @@ class AddExpenseFragment : Fragment() {
             Toast.makeText(requireContext(), "Please fill in all fields.", Toast.LENGTH_SHORT).show()
             return
         }
-        if (amount <=0){
-
-        }
 
         val expense = hashMapOf(
             "amount" to amount,
