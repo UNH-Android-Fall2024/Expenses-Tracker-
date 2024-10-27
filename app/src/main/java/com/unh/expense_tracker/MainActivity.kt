@@ -64,7 +64,6 @@ class MainActivity : AppCompatActivity() {
                         binding.editTextUserName.setText("")
                         binding.editTextPassword.setText("")
 
-                        Log.d("MainActivity2", "MainActivity2 started successfully")
                         val intent = Intent(this, MainActivity2::class.java)
                         startActivity(intent)
                         Log.d("MainActivity2", "MainActivity2 started successfully2")
