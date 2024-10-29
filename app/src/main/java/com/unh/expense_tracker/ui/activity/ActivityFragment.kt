@@ -19,12 +19,12 @@ import com.google.firebase.ktx.Firebase
 
 class ActivityFragment : Fragment() {
 
-    private var _binding: FragmentActivityBinding? = null
+    private lateinit var binding: FragmentActivityBinding
     private val db = Firebase.firestore
 
     // This property is only valid between onCreateView and
     // onDestroyView.
-    private val binding get() = _binding!!
+//    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,7 +34,7 @@ class ActivityFragment : Fragment() {
         val activityViewModel =
             ViewModelProvider(this).get(ActivityViewModel::class.java)
 
-        _binding = FragmentActivityBinding.inflate(inflater, container, false)
+        binding = FragmentActivityBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         //val textView: TextView = binding.textTitle
@@ -44,6 +44,7 @@ class ActivityFragment : Fragment() {
         }
         return root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -74,18 +75,20 @@ class ActivityFragment : Fragment() {
                     for (document in snapshots.documents) {
                         val expenseString = document.getString("amount")
                         val expense = expenseString?.toDoubleOrNull() ?: 0.0
+                        Log.w("test", "${expense}")
                         totalExpense += expense
                     }
                 }
-
+                Log.w("test", "total - ${totalExpense}")
                 val formattedTotal = String.format("$%.2f", totalExpense)
+                Log.w("test", "formatted total - $formattedTotal")
                 binding.spendSoFarText.text = "Amount Spent this Month\n$formattedTotal"
             }
     }
 
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+//    override fun onDestroyView() {
+//        super.onDestroyView()
+//        _binding = null
+//    }
 }

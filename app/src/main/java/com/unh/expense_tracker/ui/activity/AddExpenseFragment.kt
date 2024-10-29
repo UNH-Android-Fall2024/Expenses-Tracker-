@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.unh.expense_tracker.databinding.FragmentAddexpenseBinding
@@ -98,6 +100,7 @@ class AddExpenseFragment : Fragment() {
         db.collection("user_expenses")
             .add(expense)
             .addOnSuccessListener {
+                Log.w("test", "added")
                 Toast.makeText(requireContext(), "Expense added successfully.", Toast.LENGTH_SHORT).show()
                 binding.etAmount.text.clear()
                 binding.etDescription.text.clear()
@@ -105,6 +108,7 @@ class AddExpenseFragment : Fragment() {
                 binding.tvSelectedDate.text = "DD/MM/YYYY"
             }
             .addOnFailureListener { e ->
+                Log.w("test", "not added - ${e.message}")
                 Toast.makeText(requireContext(), "Failed to add expense: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
