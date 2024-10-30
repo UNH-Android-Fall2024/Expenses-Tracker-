@@ -75,26 +75,26 @@ class AddExpenseFragment : Fragment() {
     }
 
     private fun saveaddExpenseToFirestore() {
-        val amountstring = binding.etAmount.text.toString().trim()
+        val amountString = binding.etAmount.text.toString().trim()
         val description = binding.etDescription.text.toString().trim()
         val category = binding.etCategory.text.toString().trim()
         val date = binding.tvSelectedDate.text.toString().trim()
-        //val email = "h@gmail.com"
         val email = AppData.email
-        // Print email in Log terminal
         Log.d("AddExpenseFragment", "Email received: $email")
 
-        if ( description.isEmpty() || category.isEmpty() || date.isEmpty()) {
+        if (description.isEmpty() || category.isEmpty() || date.isEmpty()) {
             Toast.makeText(requireContext(), "Please fill in all fields.", Toast.LENGTH_SHORT).show()
             return
         }
-        val amount = amountstring.toDoubleOrNull()
+
+        val amount = amountString.toDoubleOrNull()
         if (amount == null || amount <= 0) {
             Toast.makeText(requireContext(), "Enter an amount greater than 0.", Toast.LENGTH_SHORT).show()
             return
         }
+
         val expense = hashMapOf(
-            "amount" to amountstring,
+            "amount" to amountString,
             "description" to description,
             "category" to category,
             "date" to date,
@@ -104,17 +104,24 @@ class AddExpenseFragment : Fragment() {
         db.collection("user_expenses")
             .add(expense)
             .addOnSuccessListener {
-                Log.w("test", "added")
+                Log.d("AddExpenseFragment", "Expense added successfully")
                 Toast.makeText(requireContext(), "Expense added successfully.", Toast.LENGTH_SHORT).show()
-                binding.etAmount.text.clear()
-                binding.etDescription.text.clear()
-                binding.etCategory.text.clear()
-                binding.tvSelectedDate.text = "DD/MM/YYYY"
+                clearInputFields()
+
+
+                findNavController().previousBackStackEntry?.savedStateHandle?.set("expense_added", true)
             }
             .addOnFailureListener { e ->
-                Log.w("test", "not added - ${e.message}")
+                Log.w("AddExpenseFragment", "Failed to add expense - ${e.message}")
                 Toast.makeText(requireContext(), "Failed to add expense: ${e.message}", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun clearInputFields() {
+        binding.etAmount.text.clear()
+        binding.etDescription.text.clear()
+        binding.etCategory.text.clear()
+        binding.tvSelectedDate.text = "DD/MM/YYYY"
     }
 
     override fun onDestroyView() {

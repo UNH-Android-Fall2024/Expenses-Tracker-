@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -17,33 +16,19 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.unh.expense_tracker.AppData
 
-
 class ActivityFragment : Fragment() {
 
     private lateinit var binding: FragmentActivityBinding
     private val db = Firebase.firestore
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-//    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val activityViewModel =
-            ViewModelProvider(this).get(ActivityViewModel::class.java)
-
+        val activityViewModel = ViewModelProvider(this).get(ActivityViewModel::class.java)
         binding = FragmentActivityBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        //val textView: TextView = binding.textTitle
-        activityViewModel.text.observe(viewLifecycleOwner) {
-         //   textView.text = it
-          //  Log.d("test", it)
-        }
-        return root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,17 +37,28 @@ class ActivityFragment : Fragment() {
         val currentDate = Calendar.getInstance().time
         val dateFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
         val formattedDate = "Today, ${dateFormat.format(currentDate)}"
+        binding.textCurrentDate.text = formattedDate
+
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>("expense_added")
+            ?.observe(viewLifecycleOwner) { result ->
+                if (result) {
+                    loadTotalExpense()
+                }
+            }
+
+        binding.fabAdd.setOnClickListener {
+            findNavController().navigate(ActivityFragmentDirections.actionNavigationActivityToAddExpenseFragment())
+        }
 
         loadTotalExpense()
+    }
 
-        binding.textCurrentDate.text = formattedDate
-        binding.fabAdd.setOnClickListener {
-           findNavController().navigate(ActivityFragmentDirections.actionNavigationActivityToAddExpenseFragment())
-        }
+    override fun onResume() {
+        super.onResume()
+        loadTotalExpense()
     }
 
     private fun loadTotalExpense() {
-        //val userEmail = "h@gmail.com"
         val userEmail = AppData.email
         db.collection("user_expenses")
             .whereEqualTo("email", userEmail)
@@ -77,20 +73,13 @@ class ActivityFragment : Fragment() {
                     for (document in snapshots.documents) {
                         val expenseString = document.getString("amount")
                         val expense = expenseString?.toDoubleOrNull() ?: 0.0
-                        Log.w("test", "${expense}")
                         totalExpense += expense
                     }
                 }
-                Log.w("test", "total - ${totalExpense}")
+
                 val formattedTotal = String.format("$%.2f", totalExpense)
-                Log.w("test", "formatted total - $formattedTotal")
                 binding.spendSoFarText.text = "Amount Spent this Month\n$formattedTotal"
+                Log.d("ActivityFragment", "Total Expense Updated: $formattedTotal")
             }
     }
-
-
-//    override fun onDestroyView() {
-//        super.onDestroyView()
-//        _binding = null
-//    }
 }
