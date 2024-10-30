@@ -15,6 +15,7 @@ import com.unh.expense_tracker.databinding.FragmentActivityBinding
 import java.util.Locale
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.unh.expense_tracker.AppData
 
 
 class ActivityFragment : Fragment() {
@@ -61,7 +62,8 @@ class ActivityFragment : Fragment() {
     }
 
     private fun loadTotalExpense() {
-        val userEmail = "h@gmail.com"
+        //val userEmail = "h@gmail.com"
+        val userEmail = AppData.email
         db.collection("user_expenses")
             .whereEqualTo("email", userEmail)
             .addSnapshotListener { snapshots, error ->

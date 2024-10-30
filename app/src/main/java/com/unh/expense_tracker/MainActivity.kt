@@ -65,6 +65,7 @@ class MainActivity : AppCompatActivity() {
                         binding.editTextPassword.setText("")
 
                         val intent = Intent(this, MainActivity2::class.java)
+                        intent.putExtra("email", email)
                         startActivity(intent)
                         Log.d("MainActivity2", "MainActivity2 started successfully2")
                     } else {

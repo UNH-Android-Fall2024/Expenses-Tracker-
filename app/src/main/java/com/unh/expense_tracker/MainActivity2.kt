@@ -22,6 +22,9 @@ class MainActivity2 : AppCompatActivity() {
         binding = ActivityMain2Binding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val email = intent.getStringExtra("email")
+        AppData.email = email
+
         val navView: BottomNavigationView = binding.navView
 //        Log.d("test",supportActionBar!!.title.toString())
 

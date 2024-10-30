@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.unh.expense_tracker.AppData
 import com.unh.expense_tracker.databinding.FragmentAddexpenseBinding
 import java.util.Locale
 
@@ -78,7 +79,10 @@ class AddExpenseFragment : Fragment() {
         val description = binding.etDescription.text.toString().trim()
         val category = binding.etCategory.text.toString().trim()
         val date = binding.tvSelectedDate.text.toString().trim()
-        val email = "h@gmail.com"
+        //val email = "h@gmail.com"
+        val email = AppData.email
+        // Print email in Log terminal
+        Log.d("AddExpenseFragment", "Email received: $email")
 
         if ( description.isEmpty() || category.isEmpty() || date.isEmpty()) {
             Toast.makeText(requireContext(), "Please fill in all fields.", Toast.LENGTH_SHORT).show()
