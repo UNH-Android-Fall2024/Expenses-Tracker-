@@ -34,8 +34,6 @@ class ActivityFragment : Fragment() {
         binding = FragmentActivityBinding.inflate(inflater, container, false)
 
         return binding.root
-
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,35 +48,68 @@ class ActivityFragment : Fragment() {
             ?.observe(viewLifecycleOwner) { result ->
                 if (result) {
                     loadTotalExpense()
+                    loadExpenseDataFromFirebase()
                 }
             }
 
         binding.fabAdd.setOnClickListener {
             findNavController().navigate(ActivityFragmentDirections.actionNavigationActivityToAddExpenseFragment())
         }
-
         loadTotalExpense()
-
-        val ExpenseRecyclerList : ArrayList<expensecard> = arrayListOf()
-        for (expenses in expenselist){
-            ExpenseRecyclerList.add(
-                expensecard(
-                    "Amount Spent: "+expenses.amount,
-                    "Transaction Date: "+expenses.Transactiondate,
-                    "Category: "+expenses.category,
-                    "Description: "+expenses.desc
-                )
-            )
-        }
-        mRecyclerView=binding.recyclerExpenseChild
-        mRecyclerView.setHasFixedSize(true)
-        mRecyclerView.layoutManager=LinearLayoutManager(context)
-        mRecyclerView.adapter=ExpenseAdapter(ExpenseRecyclerList,this)
+        loadExpenseDataFromFirebase()
     }
 
     override fun onResume() {
         super.onResume()
         loadTotalExpense()
+        loadExpenseDataFromFirebase()
+    }
+    private fun loadExpenseDataFromFirebase() {
+        val userEmail = AppData.email
+        val expenseRecyclerList: ArrayList<expensecard> = arrayListOf()
+
+        mRecyclerView = binding.recyclerExpenseChild
+        mRecyclerView.setHasFixedSize(true)
+        mRecyclerView.layoutManager = LinearLayoutManager(context)
+        val expenseAdapter = ExpenseAdapter(expenseRecyclerList, this)
+        mRecyclerView.adapter = expenseAdapter
+
+        db.collection("user_expenses")
+            .whereEqualTo("email", userEmail)
+            .addSnapshotListener { snapshots, error ->
+                if (error != null) {
+                    Log.e("ActivityFragment", "Error loading expenses", error)
+                    return@addSnapshotListener
+                }
+
+                if (snapshots == null || snapshots.isEmpty) {
+                    Log.d("ActivityFragment", "No data available for user: $userEmail")
+                    return@addSnapshotListener
+                }
+
+                Log.d("ActivityFragment", "Data found for user: $userEmail with ${snapshots.size()} entries")
+
+                expenseRecyclerList.clear()
+
+                for (document in snapshots.documents) {
+                    val amount = document.getString("amount") ?: "0"
+                    val transactionDate = document.getString("date") ?: "N/A"
+                    val description = document.getString("description") ?: "N/A"
+                    val category = document.getString("category") ?: "N/A"
+
+                    expenseRecyclerList.add(
+                        expensecard(
+                            "Amount Spent: $amount",
+                            "Transaction Date: $transactionDate",
+                            "Category: $category",
+                            "Description: $description"
+                        )
+                    )
+                }
+
+                Log.d("ActivityFragment", "RecyclerView updated with ${expenseRecyclerList.size} items")
+                expenseAdapter.notifyDataSetChanged()
+            }
     }
 
     private fun loadTotalExpense() {
