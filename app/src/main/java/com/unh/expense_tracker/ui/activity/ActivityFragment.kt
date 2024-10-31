@@ -5,11 +5,14 @@ import android.icu.util.Calendar
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.unh.expense_tracker.databinding.FragmentActivityBinding
 import java.util.Locale
 import com.google.firebase.firestore.ktx.firestore
@@ -20,6 +23,7 @@ class ActivityFragment : Fragment() {
 
     private lateinit var binding: FragmentActivityBinding
     private val db = Firebase.firestore
+    private lateinit var mRecyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,7 +32,10 @@ class ActivityFragment : Fragment() {
     ): View {
         val activityViewModel = ViewModelProvider(this).get(ActivityViewModel::class.java)
         binding = FragmentActivityBinding.inflate(inflater, container, false)
+
         return binding.root
+
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,6 +58,22 @@ class ActivityFragment : Fragment() {
         }
 
         loadTotalExpense()
+
+        val ExpenseRecyclerList : ArrayList<expensecard> = arrayListOf()
+        for (expenses in expenselist){
+            ExpenseRecyclerList.add(
+                expensecard(
+                    "Amount Spent: "+expenses.amount,
+                    "Transaction Date: "+expenses.Transactiondate,
+                    "Category: "+expenses.category,
+                    "Description: "+expenses.desc
+                )
+            )
+        }
+        mRecyclerView=binding.recyclerExpenseChild
+        mRecyclerView.setHasFixedSize(true)
+        mRecyclerView.layoutManager=LinearLayoutManager(context)
+        mRecyclerView.adapter=ExpenseAdapter(ExpenseRecyclerList,this)
     }
 
     override fun onResume() {
