@@ -55,6 +55,10 @@ class ActivityFragment : Fragment() {
         binding.fabAdd.setOnClickListener {
             findNavController().navigate(ActivityFragmentDirections.actionNavigationActivityToAddExpenseFragment())
         }
+        binding.btnTransactions.setOnClickListener{
+            findNavController().navigate(ActivityFragmentDirections.actionNavigationActivityToExpenseStatistics())
+        }
+
         loadTotalExpense()
         loadExpenseDataFromFirebase()
     }

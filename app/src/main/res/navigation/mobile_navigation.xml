@@ -9,10 +9,14 @@
         android:id="@+id/navigation_activity"
         android:name="com.unh.expense_tracker.ui.activity.ActivityFragment"
         android:label="@string/title_activity"
-        tools:layout="@layout/fragment_activity" >
+        tools:layout="@layout/fragment_activity">
         <action
             android:id="@+id/action_navigation_activity_to_addExpenseFragment"
             app:destination="@id/addExpenseFragment" />
+        <action
+            android:id="@+id/action_navigation_activity_to_expenseStatistics"
+            app:destination="@id/expenseStatistics"
+            tools:layout="@layout/expense_statistics"/>
     </fragment>
 
     <fragment
@@ -33,6 +37,15 @@
         tools:layout="@layout/fragment_addexpense">
         <action
             android:id="@+id/action_addExpenseFragment_to_navigation_activity"
+            app:destination="@id/navigation_activity" />
+    </fragment>
+    <fragment
+        android:id="@+id/expenseStatistics"
+        android:name="com.unh.expense_tracker.ui.activity.ExpenseStatisticsFragment"
+        android:label="ExpenseStatistics"
+        tools:layout="@layout/expense_statistics">
+        <action
+            android:id="@+id/action_expenseStatistics_to_navigation_activity"
             app:destination="@id/navigation_activity" />
     </fragment>
 
