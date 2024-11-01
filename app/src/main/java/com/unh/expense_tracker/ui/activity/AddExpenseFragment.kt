@@ -1,5 +1,6 @@
 package com.unh.expense_tracker.ui.activity
 
+import android.R
 import android.app.DatePickerDialog
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
@@ -11,6 +12,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -41,6 +43,19 @@ class AddExpenseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val categories = listOf(
+            "House Rent",
+            "House Utilities",
+            "Vehicle Expenses",
+            "Food",
+            "Trips",
+            "Groceries",
+            "Shopping",
+            "Miscellaneous"
+        )
+        val adapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_item, categories)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerCategory.adapter = adapter
 
         binding.ivCalendar.setOnClickListener {
             showDatePickerDialog()
@@ -97,7 +112,7 @@ class AddExpenseFragment : Fragment() {
     private fun saveaddExpenseToFirestore() {
         val amountString = binding.etAmount.text.toString().trim()
         val description = binding.etDescription.text.toString().trim()
-        val category = binding.etCategory.text.toString().trim()
+        val category = binding.spinnerCategory.selectedItem.toString()
         val date = binding.tvSelectedDate.text.toString().trim()
         val email = AppData.email
         Log.d("AddExpenseFragment", "Email received: $email")
@@ -140,7 +155,7 @@ class AddExpenseFragment : Fragment() {
     private fun clearInputFields() {
         binding.etAmount.text.clear()
         binding.etDescription.text.clear()
-        binding.etCategory.text.clear()
+        binding.spinnerCategory.setSelection(0)
         binding.tvSelectedDate.text = "DD/MM/YYYY"
     }
 

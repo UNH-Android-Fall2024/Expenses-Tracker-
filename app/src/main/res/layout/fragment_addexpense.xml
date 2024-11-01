@@ -98,16 +98,14 @@
             android:layout_height="32dp"
             android:src="@drawable/baseline_category_24" />
 
-        <EditText
-            android:id="@+id/etCategory"
+        <Spinner
+            android:id="@+id/spinnerCategory"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingStart="8dp"
-            android:hint="Enter the category"
-            android:textSize="16sp" />
+            android:spinnerMode="dropdown" />
     </LinearLayout>
-
     <TextView
         android:id="@+id/tvDate"
         android:layout_width="wrap_content"
