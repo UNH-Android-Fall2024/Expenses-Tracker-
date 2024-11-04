@@ -67,9 +67,9 @@ class ExpenseStatisticsFragment : Fragment() {
                 position = XAxis.XAxisPosition.BOTTOM
                 setDrawGridLines(false)
                 granularity = 1f
-                textSize = 10f
-                labelRotationAngle = -25f
-                setLabelCount(8, true)
+                textSize = 8f
+                labelRotationAngle = -45f
+                setLabelCount(8, false)
             }
 
             axisLeft.axisMinimum = 0f
@@ -81,6 +81,12 @@ class ExpenseStatisticsFragment : Fragment() {
     private fun fetchExpenseData() {
         val userEmail = AppData.email
         val categoryTotals = mutableMapOf<String, Float>()
+        val allCategories = listOf(
+            "House Rent", "House Utilities", "Food", "Trips",
+            "Vehicle Expenses", "Groceries", "Shopping", "Miscellaneous"
+        )
+
+        allCategories.forEach { category -> categoryTotals[category] = 0f }
 
         db.collection("user_expenses")
             .whereEqualTo("email", userEmail)
@@ -90,21 +96,19 @@ class ExpenseStatisticsFragment : Fragment() {
                     return@addSnapshotListener
                 }
 
-                categoryTotals.clear()
-
-                for (document in snapshots!!.documents) {
-                    val category = document.getString("category") ?: continue
+                snapshots?.documents?.forEach { document ->
+                    val category = document.getString("category") ?: return@forEach
                     val amount = document.getString("amount")?.toFloatOrNull() ?: 0f
                     categoryTotals[category] = categoryTotals.getOrDefault(category, 0f) + amount
                 }
 
-                updateBarChart(categoryTotals)
+                updateBarChart(categoryTotals, allCategories)
             }
     }
 
-    private fun updateBarChart(categoryTotals: Map<String, Float>) {
-        val entries = categoryTotals.entries.mapIndexed { index, entry ->
-            BarEntry(index.toFloat(), entry.value)
+    private fun updateBarChart(categoryTotals: Map<String, Float>, allCategories: List<String>) {
+        val entries = allCategories.mapIndexed { index, category ->
+            BarEntry(index.toFloat(), categoryTotals[category] ?: 0f)
         }
 
         val dataSet = BarDataSet(entries, "Expenses").apply {
@@ -118,12 +122,12 @@ class ExpenseStatisticsFragment : Fragment() {
                 Color.parseColor("#FF6384"),
                 Color.parseColor("#36A2EB")
             )
-            setValueTextSize(12f)
+            setValueTextSize(10f)
             setDrawValues(true)
         }
 
         val barData = BarData(dataSet)
-        barData.barWidth = 0.8f
+        barData.barWidth = 0.7f
 
         binding.barChart.apply {
             data = barData
@@ -132,14 +136,16 @@ class ExpenseStatisticsFragment : Fragment() {
                 position = XAxis.XAxisPosition.BOTTOM
                 granularity = 1f
                 setDrawLabels(true)
-                setLabelRotationAngle(-25f)
-                valueFormatter = IndexAxisValueFormatter(categoryTotals.keys.toList())
+                labelRotationAngle = -45f
+                setLabelCount(allCategories.size, false)
+                valueFormatter = IndexAxisValueFormatter(allCategories)
             }
 
             axisLeft.axisMinimum = 0f
             axisRight.isEnabled = false
             legend.isEnabled = false
 
+            setFitBars(true)
             invalidate()
         }
     }
