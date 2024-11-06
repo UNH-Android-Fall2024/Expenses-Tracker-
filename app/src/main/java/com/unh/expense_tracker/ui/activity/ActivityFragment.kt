@@ -72,6 +72,9 @@ class ActivityFragment : Fragment() {
         val userEmail = AppData.email
         val expenseRecyclerList: ArrayList<expensecard> = arrayListOf()
 
+        val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+
         mRecyclerView = binding.recyclerExpenseChild
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -100,15 +103,27 @@ class ActivityFragment : Fragment() {
                     val transactionDate = document.getString("date") ?: "N/A"
                     val description = document.getString("description") ?: "N/A"
                     val category = document.getString("category") ?: "N/A"
+                    val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                    val date = dateFormat.parse(transactionDate)
 
-                    expenseRecyclerList.add(
-                        expensecard(
-                            "Amount Spent: $amount",
-                            "Transaction Date: $transactionDate",
-                            "Category: $category",
-                            "Description: $description"
-                        )
-                    )
+                    if (date != null) {
+                        val calendar = Calendar.getInstance()
+                        calendar.time = date
+                        val expenseMonth = calendar.get(Calendar.MONTH)
+                        val expenseYear = calendar.get(Calendar.YEAR)
+
+                        // Check if the expense date matches the current month and year
+                        if (expenseMonth == currentMonth && expenseYear == currentYear) {
+                            expenseRecyclerList.add(
+                                expensecard(
+                                    "Amount Spent: $amount",
+                                    "Transaction Date: $transactionDate",
+                                    "Category: $category",
+                                    "Description: $description"
+                                )
+                            )
+                        }
+                    }
                 }
 
                 Log.d("ActivityFragment", "RecyclerView updated with ${expenseRecyclerList.size} items")
@@ -118,6 +133,9 @@ class ActivityFragment : Fragment() {
 
     private fun loadTotalExpense() {
         val userEmail = AppData.email
+        val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+
         db.collection("user_expenses")
             .whereEqualTo("email", userEmail)
             .addSnapshotListener { snapshots, error ->
@@ -130,8 +148,20 @@ class ActivityFragment : Fragment() {
                 if (snapshots != null && !snapshots.isEmpty) {
                     for (document in snapshots.documents) {
                         val expenseString = document.getString("amount")
-                        val expense = expenseString?.toDoubleOrNull() ?: 0.0
-                        totalExpense += expense
+                        val transactionDate = document.getString("date") ?: "N/A"
+                        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                        val date = dateFormat.parse(transactionDate)
+                        if (date != null) {
+                            val calendar = Calendar.getInstance()
+                            calendar.time = date
+                            val expenseMonth = calendar.get(Calendar.MONTH)
+                            val expenseYear = calendar.get(Calendar.YEAR)
+
+                            if (expenseMonth == currentMonth && expenseYear == currentYear) {
+                                val expense = expenseString?.toDoubleOrNull() ?: 0.0
+                                totalExpense += expense
+                            }
+                        }
                     }
                 }
 
