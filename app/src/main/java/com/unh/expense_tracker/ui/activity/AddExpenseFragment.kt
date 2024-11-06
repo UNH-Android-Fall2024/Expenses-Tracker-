@@ -103,6 +103,9 @@ class AddExpenseFragment : Fragment() {
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
+        val minDate = Calendar.getInstance()
+        minDate.set(Calendar.DAY_OF_MONTH, 1)
+
         val datePickerDialog = DatePickerDialog(
             requireContext(),
             { _, selectedYear, selectedMonth, selectedDay ->
@@ -117,6 +120,7 @@ class AddExpenseFragment : Fragment() {
             month,
             day
         )
+        datePickerDialog.datePicker.minDate = minDate.timeInMillis
         datePickerDialog.datePicker.maxDate = calendar.timeInMillis
         datePickerDialog.show()
     }
