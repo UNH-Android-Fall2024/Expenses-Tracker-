@@ -68,6 +68,18 @@ class AddExpenseFragment : Fragment() {
         binding.btnAddExpense.setOnClickListener {
             saveaddExpenseToFirestore()
         }
+
+        binding.cbRecurringYes.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.cbRecurringNo.isChecked = false
+            }
+        }
+
+        binding.cbRecurringNo.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.cbRecurringYes.isChecked = false
+            }
+        }
         requireActivity().addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 // abstract method
@@ -115,6 +127,8 @@ class AddExpenseFragment : Fragment() {
         val category = binding.spinnerCategory.selectedItem.toString()
         val date = binding.tvSelectedDate.text.toString().trim()
         val email = AppData.email
+        val isRecurring = if (binding.cbRecurringYes.isChecked) "Yes" else "No"
+
         Log.d("AddExpenseFragment", "Email received: $email")
 
         if (description.isEmpty() || category.isEmpty() || date.isEmpty()) {
@@ -133,7 +147,8 @@ class AddExpenseFragment : Fragment() {
             "description" to description,
             "category" to category,
             "date" to date,
-            "email" to email
+            "email" to email,
+            "recurring" to isRecurring
         )
 
         db.collection("user_expenses")
@@ -157,6 +172,8 @@ class AddExpenseFragment : Fragment() {
         binding.etDescription.text.clear()
         binding.spinnerCategory.setSelection(0)
         binding.tvSelectedDate.text = "DD/MM/YYYY"
+        binding.cbRecurringYes.isChecked = false
+        binding.cbRecurringNo.isChecked = false
     }
 
     override fun onDestroyView() {
