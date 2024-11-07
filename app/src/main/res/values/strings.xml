@@ -28,6 +28,7 @@
     <string name="category">Category</string>
     <string name="select_the_category">Select the category</string>
     <string name="date">Date</string>
+    <string name="enter_value">Enter value</string>
 
 
 </resources>
