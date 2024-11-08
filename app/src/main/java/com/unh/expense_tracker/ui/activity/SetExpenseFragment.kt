@@ -56,6 +56,16 @@ class SetExpenseFragment : Fragment() {
         binding.setLimitButton.setOnClickListener {
             saveExpenseLimittofirebase()
         }
+
+        binding.editLimitButton.setOnClickListener {
+            if (isDataExists) {
+                enableeditFields()
+            } else {
+                Toast.makeText(requireContext(), "No data available to edit.", Toast.LENGTH_SHORT).show()
+            }
+        }
+        
+
     }
     private fun checkIfDataExists() {
         val email = AppData.email
@@ -88,6 +98,19 @@ class SetExpenseFragment : Fragment() {
                 }
             }
     }
+
+private fun enableeditFields(){
+    binding.totalIncomeInput.isEnabled = true
+    binding.monthlyLimitInput.isEnabled = true
+    binding.contentLayout.findViewById<EditText>(R.id.houseRentInput).isEnabled = true
+    binding.contentLayout.findViewById<EditText>(R.id.houseUtilitiesInput).isEnabled = true
+    binding.contentLayout.findViewById<EditText>(R.id.vehicleExpensesInput).isEnabled = true
+    binding.contentLayout.findViewById<EditText>(R.id.foodInput).isEnabled = true
+    binding.contentLayout.findViewById<EditText>(R.id.tripsInput).isEnabled = true
+    binding.contentLayout.findViewById<EditText>(R.id.groceriesInput).isEnabled = true
+    binding.contentLayout.findViewById<EditText>(R.id.shoppingInput).isEnabled = true
+    binding.contentLayout.findViewById<EditText>(R.id.miscellaneousInput).isEnabled = true
+}
 
     private fun enableFields() {
         binding.totalIncomeInput.text.clear()
@@ -140,25 +163,38 @@ class SetExpenseFragment : Fragment() {
             "miscellaneous" to miscellaneous
         )
         if (isDataExists) {
-            Toast.makeText(requireContext(), "Expense data already exists and cannot be added again.", Toast.LENGTH_SHORT).show()
-            return
+            db.collection("expense_limit")
+                .whereEqualTo("email", email)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    if (!querySnapshot.isEmpty) {
+                        val documentId = querySnapshot.documents[0].id
+                        db.collection("expense_limit").document(documentId)
+                            .set(expenseData)
+                            .addOnSuccessListener {
+                                Toast.makeText(requireContext(), "Expense limit updated successfully!", Toast.LENGTH_SHORT).show()
+                                disableFields()
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(requireContext(), "Failed to update expense limit: ${e.message}", Toast.LENGTH_SHORT).show()
+                            }
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(requireContext(), "Failed to fetch document: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            db.collection("expense_limit")
+                .add(expenseData)
+                .addOnSuccessListener {
+                    Toast.makeText(requireContext(), "Expense limit saved successfully!", Toast.LENGTH_SHORT).show()
+                    disableFields()
+                    isDataExists = true
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(requireContext(), "Failed to save expense limit: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
         }
-        if(totalIncome.isEmpty() || monthlyLimit.isEmpty() || houseRent.isEmpty() || houseUtilities.isEmpty()|| vehicleExpenses.isEmpty()
-            || food.isEmpty() || trips.isEmpty() || groceries.isEmpty() || shopping.isEmpty() || miscellaneous.isEmpty()){
-            Toast.makeText(requireContext(), "Please fill in all fields.", Toast.LENGTH_SHORT).show()
-            return
-        }
-        db.collection("expense_limit")
-            .add(expenseData)
-            .addOnSuccessListener {
-                Toast.makeText(requireContext(), "Expense limit saved successfully!", Toast.LENGTH_SHORT).show()
-                disableFields()
-                isDataExists = true
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(requireContext(), "Failed to save expense limit: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
-
     }
     private fun disableFields() {
         binding.totalIncomeInput.isEnabled = false
