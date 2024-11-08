@@ -21,6 +21,7 @@ import com.unh.expense_tracker.databinding.SetExpenseBinding
 
 class SetExpenseFragment : Fragment() {
     private val db = Firebase.firestore
+    private var isDataExists = false
     private lateinit var binding: SetExpenseBinding
 
     override fun onCreateView(
@@ -50,9 +51,67 @@ class SetExpenseFragment : Fragment() {
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
+        checkIfDataExists()
         binding.setLimitButton.setOnClickListener {
             saveExpenseLimittofirebase()
         }
+    }
+    private fun checkIfDataExists() {
+        val email = AppData.email
+
+        db.collection("expense_limit")
+            .whereEqualTo("email", email)
+            .addSnapshotListener { snapshots, e ->
+                if (e != null) {
+                    Toast.makeText(requireContext(), "Failed to listen for data: ${e.message}", Toast.LENGTH_SHORT).show()
+                    return@addSnapshotListener
+                }
+
+                if (snapshots != null && !snapshots.isEmpty) {
+                    val document = snapshots.documents[0]
+                    binding.totalIncomeInput.setText(document.getString("totalIncome"))
+                    binding.monthlyLimitInput.setText(document.getString("monthlyLimit"))
+                    binding.contentLayout.findViewById<EditText>(R.id.houseRentInput).setText(document.getString("houseRent"))
+                    binding.contentLayout.findViewById<EditText>(R.id.houseUtilitiesInput).setText(document.getString("houseUtilities"))
+                    binding.contentLayout.findViewById<EditText>(R.id.vehicleExpensesInput).setText(document.getString("vehicleExpenses"))
+                    binding.contentLayout.findViewById<EditText>(R.id.foodInput).setText(document.getString("food"))
+                    binding.contentLayout.findViewById<EditText>(R.id.tripsInput).setText(document.getString("trips"))
+                    binding.contentLayout.findViewById<EditText>(R.id.groceriesInput).setText(document.getString("groceries"))
+                    binding.contentLayout.findViewById<EditText>(R.id.shoppingInput).setText(document.getString("shopping"))
+                    binding.contentLayout.findViewById<EditText>(R.id.miscellaneousInput).setText(document.getString("miscellaneous"))
+                    disableFields()
+                    isDataExists = true
+                } else {
+                    enableFields()
+                    isDataExists = false
+                }
+            }
+    }
+
+    private fun enableFields() {
+        binding.totalIncomeInput.text.clear()
+        binding.monthlyLimitInput.text.clear()
+        binding.contentLayout.findViewById<EditText>(R.id.houseRentInput).text.clear()
+        binding.contentLayout.findViewById<EditText>(R.id.houseUtilitiesInput).text.clear()
+        binding.contentLayout.findViewById<EditText>(R.id.vehicleExpensesInput).text.clear()
+        binding.contentLayout.findViewById<EditText>(R.id.foodInput).text.clear()
+        binding.contentLayout.findViewById<EditText>(R.id.tripsInput).text.clear()
+        binding.contentLayout.findViewById<EditText>(R.id.groceriesInput).text.clear()
+        binding.contentLayout.findViewById<EditText>(R.id.shoppingInput).text.clear()
+        binding.contentLayout.findViewById<EditText>(R.id.miscellaneousInput).text.clear()
+
+
+        binding.totalIncomeInput.isEnabled = true
+        binding.monthlyLimitInput.isEnabled = true
+        binding.contentLayout.findViewById<EditText>(R.id.houseRentInput).isEnabled = true
+        binding.contentLayout.findViewById<EditText>(R.id.houseUtilitiesInput).isEnabled = true
+        binding.contentLayout.findViewById<EditText>(R.id.vehicleExpensesInput).isEnabled = true
+        binding.contentLayout.findViewById<EditText>(R.id.foodInput).isEnabled = true
+        binding.contentLayout.findViewById<EditText>(R.id.tripsInput).isEnabled = true
+        binding.contentLayout.findViewById<EditText>(R.id.groceriesInput).isEnabled = true
+        binding.contentLayout.findViewById<EditText>(R.id.shoppingInput).isEnabled = true
+        binding.contentLayout.findViewById<EditText>(R.id.miscellaneousInput).isEnabled = true
     }
     private fun saveExpenseLimittofirebase(){
         val email = AppData.email
@@ -80,6 +139,10 @@ class SetExpenseFragment : Fragment() {
             "shopping" to shopping,
             "miscellaneous" to miscellaneous
         )
+        if (isDataExists) {
+            Toast.makeText(requireContext(), "Expense data already exists and cannot be added again.", Toast.LENGTH_SHORT).show()
+            return
+        }
         if(totalIncome.isEmpty() || monthlyLimit.isEmpty() || houseRent.isEmpty() || houseUtilities.isEmpty()|| vehicleExpenses.isEmpty()
             || food.isEmpty() || trips.isEmpty() || groceries.isEmpty() || shopping.isEmpty() || miscellaneous.isEmpty()){
             Toast.makeText(requireContext(), "Please fill in all fields.", Toast.LENGTH_SHORT).show()
@@ -89,10 +152,24 @@ class SetExpenseFragment : Fragment() {
             .add(expenseData)
             .addOnSuccessListener {
                 Toast.makeText(requireContext(), "Expense limit saved successfully!", Toast.LENGTH_SHORT).show()
+                disableFields()
+                isDataExists = true
             }
             .addOnFailureListener { e ->
                 Toast.makeText(requireContext(), "Failed to save expense limit: ${e.message}", Toast.LENGTH_SHORT).show()
             }
 
+    }
+    private fun disableFields() {
+        binding.totalIncomeInput.isEnabled = false
+        binding.monthlyLimitInput.isEnabled = false
+        binding.contentLayout.findViewById<EditText>(R.id.houseRentInput).isEnabled = false
+        binding.contentLayout.findViewById<EditText>(R.id.houseUtilitiesInput).isEnabled = false
+        binding.contentLayout.findViewById<EditText>(R.id.vehicleExpensesInput).isEnabled = false
+        binding.contentLayout.findViewById<EditText>(R.id.foodInput).isEnabled = false
+        binding.contentLayout.findViewById<EditText>(R.id.tripsInput).isEnabled = false
+        binding.contentLayout.findViewById<EditText>(R.id.groceriesInput).isEnabled = false
+        binding.contentLayout.findViewById<EditText>(R.id.shoppingInput).isEnabled = false
+        binding.contentLayout.findViewById<EditText>(R.id.miscellaneousInput).isEnabled = false
     }
     }
