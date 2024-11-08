@@ -64,7 +64,9 @@ class SetExpenseFragment : Fragment() {
                 Toast.makeText(requireContext(), "No data available to edit.", Toast.LENGTH_SHORT).show()
             }
         }
-        
+        binding.deleteLimitButton.setOnClickListener{
+            deleteDataFromFirebase()
+        }
 
     }
     private fun checkIfDataExists() {
@@ -184,6 +186,13 @@ private fun enableeditFields(){
                     Toast.makeText(requireContext(), "Failed to fetch document: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
         } else {
+
+            if (totalIncome.isEmpty() || monthlyLimit.isEmpty() || houseRent.isEmpty() || houseUtilities.isEmpty() ||
+                vehicleExpenses.isEmpty() || food.isEmpty() || trips.isEmpty() || groceries.isEmpty() ||
+                shopping.isEmpty() || miscellaneous.isEmpty()) {
+                Toast.makeText(requireContext(), "Please fill in all fields.", Toast.LENGTH_SHORT).show()
+                return
+            }
             db.collection("expense_limit")
                 .add(expenseData)
                 .addOnSuccessListener {
@@ -208,4 +217,49 @@ private fun enableeditFields(){
         binding.contentLayout.findViewById<EditText>(R.id.shoppingInput).isEnabled = false
         binding.contentLayout.findViewById<EditText>(R.id.miscellaneousInput).isEnabled = false
     }
+
+    private fun deleteDataFromFirebase() {
+        val email = AppData.email
+
+        db.collection("expense_limit")
+            .whereEqualTo("email", email)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    for (document in querySnapshot.documents) {
+                        db.collection("expense_limit").document(document.id)
+                            .delete()
+                            .addOnSuccessListener {
+                                Toast.makeText(requireContext(), "Data deleted successfully!", Toast.LENGTH_SHORT).show()
+                                clearFields()
+                                isDataExists = false
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(requireContext(), "Failed to delete data: ${e.message}", Toast.LENGTH_SHORT).show()
+                            }
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "No data found to delete.", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(requireContext(), "Failed to fetch data: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
     }
+
+    private fun clearFields() {
+        binding.totalIncomeInput.text.clear()
+        binding.monthlyLimitInput.text.clear()
+        binding.contentLayout.findViewById<EditText>(R.id.houseRentInput).text.clear()
+        binding.contentLayout.findViewById<EditText>(R.id.houseUtilitiesInput).text.clear()
+        binding.contentLayout.findViewById<EditText>(R.id.vehicleExpensesInput).text.clear()
+        binding.contentLayout.findViewById<EditText>(R.id.foodInput).text.clear()
+        binding.contentLayout.findViewById<EditText>(R.id.tripsInput).text.clear()
+        binding.contentLayout.findViewById<EditText>(R.id.groceriesInput).text.clear()
+        binding.contentLayout.findViewById<EditText>(R.id.shoppingInput).text.clear()
+        binding.contentLayout.findViewById<EditText>(R.id.miscellaneousInput).text.clear()
+
+        enableeditFields()
+    }
+
+}
