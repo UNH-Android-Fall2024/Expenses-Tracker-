@@ -66,18 +66,34 @@ class SetExpenseFragment : Fragment() {
             }
         }
         binding.deleteLimitButton.setOnClickListener{
-            deleteDataFromFirebase()
+            showDeleteConfirmationDialog()
         }
 
     }
 
     private fun showEditConfirmationDialog() {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Edit Expense")
+        builder.setTitle("Edit Expense Limit")
         builder.setMessage("Do you want to edit your expense?")
 
         builder.setPositiveButton("Yes") { _, _ ->
             enableeditFields()
+        }
+
+        builder.setNegativeButton("No") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        builder.create().show()
+    }
+
+    private fun showDeleteConfirmationDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Delete Expense Limit")
+        builder.setMessage("Do you want to Delete your expense?")
+
+        builder.setPositiveButton("Yes") { _, _ ->
+            deleteDataFromFirebase()
         }
 
         builder.setNegativeButton("No") { dialog, _ ->
