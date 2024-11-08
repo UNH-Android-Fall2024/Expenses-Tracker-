@@ -1,5 +1,6 @@
 package com.unh.expense_tracker.ui.activity
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -59,7 +60,7 @@ class SetExpenseFragment : Fragment() {
 
         binding.editLimitButton.setOnClickListener {
             if (isDataExists) {
-                enableeditFields()
+                showEditConfirmationDialog()
             } else {
                 Toast.makeText(requireContext(), "No data available to edit.", Toast.LENGTH_SHORT).show()
             }
@@ -68,6 +69,22 @@ class SetExpenseFragment : Fragment() {
             deleteDataFromFirebase()
         }
 
+    }
+
+    private fun showEditConfirmationDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Edit Expense")
+        builder.setMessage("Do you want to edit your expense?")
+
+        builder.setPositiveButton("Yes") { _, _ ->
+            enableeditFields()
+        }
+
+        builder.setNegativeButton("No") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        builder.create().show()
     }
     private fun checkIfDataExists() {
         val email = AppData.email
