@@ -28,9 +28,9 @@ class SplitshareFragment : Fragment() {
         _binding = FragmentSplitshareBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textDashboard
+        //val textView: TextView = binding.textDashboard
         splitshareViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+            //textView.text = it
         }
         return root
     }
