@@ -68,7 +68,12 @@ class SplitshareFragment : Fragment() {
             .get()
             .addOnSuccessListener { documents ->
                 if (!documents.isEmpty) {
-                    addsplitdatatofirebase()
+                    val document = documents.first()
+                    val firstName = document.getString("firstName") ?: ""
+                    val lastName = document.getString("lastName") ?: ""
+                    val concatenatedName = "$firstName $lastName".trim()
+
+                    addsplitdatatofirebase(concatenatedName)
                 } else {
                     Toast.makeText(context, "Email Not Registered with Expense Tracker", Toast.LENGTH_SHORT).show()
                 }
@@ -77,12 +82,13 @@ class SplitshareFragment : Fragment() {
                 Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
-    private fun addsplitdatatofirebase(){
+    private fun addsplitdatatofirebase(fullName:String){
         val userEmail = AppData.email
         val userName = binding.editUserName.text.toString().trim()
         val splitAmount = binding.editSplitAmount.text.toString().toDoubleOrNull()
         val description = binding.editDescription.text.toString().trim()
         val spentDate = binding.editSpentDate.text.toString().trim()
+        val concatenatedName=fullName
 
         if (userName.isEmpty() || splitAmount == null || description.isEmpty() || spentDate.isEmpty()) {
 
@@ -90,6 +96,7 @@ class SplitshareFragment : Fragment() {
             return
         }
         val splitData = hashMapOf(
+            "concatenatedName" to concatenatedName,
             "userName" to userName,
             "splitAmount" to splitAmount,
             "description" to description,
