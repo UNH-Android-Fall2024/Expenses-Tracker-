@@ -33,7 +33,11 @@
         android:id="@+id/navigation_account"
         android:name="com.unh.expense_tracker.ui.account.AccountFragment"
         android:label="@string/title_account"
-        tools:layout="@layout/fragment_account" />
+        tools:layout="@layout/fragment_account" >
+        <action
+            android:id="@+id/action_navigation_account_to_expenseStatistics"
+            app:destination="@id/expenseStatistics" />
+    </fragment>
     <fragment
         android:id="@+id/addExpenseFragment"
         android:name="com.unh.expense_tracker.ui.activity.AddExpenseFragment"

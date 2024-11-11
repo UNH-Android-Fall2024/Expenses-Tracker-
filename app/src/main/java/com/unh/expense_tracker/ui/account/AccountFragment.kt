@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.unh.expense_tracker.AppData
@@ -35,6 +36,14 @@ class AccountFragment : Fragment() {
         val root: View = binding.root
         loadUserDetails()
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.spentStatistics.setOnClickListener{
+            findNavController().navigate(AccountFragmentDirections.actionNavigationAccountToExpenseStatistics())
+        }
     }
 
     private fun loadUserDetails() {
