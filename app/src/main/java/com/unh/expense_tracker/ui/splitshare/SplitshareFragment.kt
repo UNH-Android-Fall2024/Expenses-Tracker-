@@ -2,12 +2,15 @@ package com.unh.expense_tracker.ui.splitshare
 
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.unh.expense_tracker.AppData
@@ -18,6 +21,7 @@ class SplitshareFragment : Fragment() {
 
     private lateinit var binding: FragmentSplitshareBinding
     private val db = Firebase.firestore
+    private lateinit var mRecyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,6 +37,52 @@ class SplitshareFragment : Fragment() {
             showDatePickerDialog()
         }
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadsplitsDataFromFirebase()
+    }
+
+    private fun loadsplitsDataFromFirebase() {
+        val userEmail = AppData.email
+        val splitRecyclerList: ArrayList<splitsharecard> = arrayListOf()
+
+        mRecyclerView = binding.recyclerSplitChild
+        mRecyclerView.setHasFixedSize(true)
+        mRecyclerView.layoutManager = LinearLayoutManager(context)
+        val splitshareAdapter = SplitshareAdapter(splitRecyclerList, this)
+        mRecyclerView.adapter = splitshareAdapter
+
+        db.collection("Users_splits")
+            .whereEqualTo("userEmail", userEmail)
+            .addSnapshotListener { snapshots, error ->
+                if (error != null) {
+                    Log.e("SplitshareFragment", "Error loading expenses", error)
+                    return@addSnapshotListener
+                }
+                if (snapshots == null || snapshots.isEmpty) {
+                    Log.d("SplitshareFragment", "No data available for user: $userEmail")
+                    return@addSnapshotListener
+                }
+                splitRecyclerList.clear()
+                for (document in snapshots.documents) {
+                val name=document.getString("concatenatedName") ?: "0"
+                    val amount=document.getLong("splitAmount") ?: "0"
+                    val datespent=document.getString("spentDate") ?: "0"
+                    val desc=document.getString("description") ?: "0"
+                    splitRecyclerList.add(
+                        splitsharecard(
+                            "Name: $name",
+                            "Split Amount: ${amount.toString()}",
+                            "Spent Date: $datespent",
+                            "Description: $desc"
+                        )
+                    )
+
+                }
+                splitshareAdapter.notifyDataSetChanged()
+            }
     }
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
