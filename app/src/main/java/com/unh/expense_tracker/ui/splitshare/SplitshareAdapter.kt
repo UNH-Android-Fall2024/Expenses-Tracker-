@@ -3,21 +3,22 @@ package com.unh.expense_tracker.ui.splitshare
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.unh.expense_tracker.R
-import com.unh.expense_tracker.ui.splitshare.splitsharecard
 
 class SplitshareAdapter(
     private val mChildList: ArrayList<splitsharecard>,
-    private val context: SplitshareFragment
+    private val fragment: SplitshareFragment
 ) : RecyclerView.Adapter<SplitshareAdapter.SplitshareViewHolder>() {
 
-    class SplitshareViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class SplitshareViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val mTextView1: TextView = itemView.findViewById(R.id.text_view1)
         val mTextView2: TextView = itemView.findViewById(R.id.text_view2)
         val mTextView3: TextView = itemView.findViewById(R.id.text_view3)
         val mTextView4: TextView = itemView.findViewById(R.id.text_view4)
+        val paidButton: Button = itemView.findViewById(R.id.buttonPaid) // Added paidButton
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SplitshareViewHolder {
@@ -32,6 +33,11 @@ class SplitshareAdapter(
         holder.mTextView2.text = currentItem.text2
         holder.mTextView3.text = currentItem.text3
         holder.mTextView4.text = currentItem.text4
+
+        holder.paidButton.setOnClickListener {
+         
+            fragment.deleteSplit(currentItem)
+        }
     }
 
     override fun getItemCount(): Int {

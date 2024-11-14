@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
@@ -30,7 +29,7 @@ class SplitshareFragment : Fragment() {
     ): View {
         binding = FragmentSplitshareBinding.inflate(inflater, container, false)
 
-        binding.buttonAddSplit.setOnClickListener{
+        binding.buttonAddSplit.setOnClickListener {
             checkEmailAndAddData()
         }
         binding.splitIvCalendar.setOnClickListener {
@@ -67,35 +66,60 @@ class SplitshareFragment : Fragment() {
                 }
                 splitRecyclerList.clear()
                 for (document in snapshots.documents) {
-                val name=document.getString("concatenatedName") ?: "0"
-                    val amount=document.getLong("splitAmount") ?: "0"
-                    val datespent=document.getString("spentDate") ?: "0"
-                    val desc=document.getString("description") ?: "0"
+                    val name = document.getString("concatenatedName") ?: "0"
+                    val amount = document.getLong("splitAmount") ?: 0L
+                    val datespent = document.getString("spentDate") ?: "0"
+                    val desc = document.getString("description") ?: "0"
                     splitRecyclerList.add(
                         splitsharecard(
                             "Name: $name",
-                            "Split Amount: ${amount.toString()}",
+                            "Split Amount: $amount",
                             "Spent Date: $datespent",
                             "Description: $desc"
                         )
                     )
-
                 }
                 splitshareAdapter.notifyDataSetChanged()
             }
     }
+
+    fun deleteSplit(splitItem: splitsharecard) {
+        val userEmail = AppData.email
+
+        db.collection("Users_splits")
+            .whereEqualTo("userEmail", userEmail)
+            .whereEqualTo("concatenatedName", splitItem.text1.removePrefix("Name: "))
+            .whereEqualTo("splitAmount", splitItem.text2.removePrefix("Split Amount: ").toLongOrNull())
+            .whereEqualTo("spentDate", splitItem.text3.removePrefix("Spent Date: "))
+            .whereEqualTo("description", splitItem.text4.removePrefix("Description: "))
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    db.collection("Users_splits").document(document.id).delete()
+                        .addOnSuccessListener {
+                            Toast.makeText(context, "Split Updated Successfully.", Toast.LENGTH_SHORT).show()
+                            loadsplitsDataFromFirebase()
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
+                }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-
         val datePickerDialog = DatePickerDialog(
             requireContext(),
             { _, selectedYear, selectedMonth, selectedDay ->
-
-                val date = "${selectedDay}/${selectedMonth + 1}/${selectedYear}"
+                val date = "$selectedDay/${selectedMonth + 1}/$selectedYear"
                 binding.editSpentDate.setText(date)
             },
             year,
@@ -105,6 +129,7 @@ class SplitshareFragment : Fragment() {
         datePickerDialog.datePicker.maxDate = calendar.timeInMillis
         datePickerDialog.show()
     }
+
     private fun checkEmailAndAddData() {
         val userName = binding.editUserName.text.toString().trim()
         val userEmail = AppData.email
@@ -132,16 +157,16 @@ class SplitshareFragment : Fragment() {
                 Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
-    private fun addsplitdatatofirebase(fullName:String){
+
+    private fun addsplitdatatofirebase(fullName: String) {
         val userEmail = AppData.email
         val userName = binding.editUserName.text.toString().trim()
         val splitAmount = binding.editSplitAmount.text.toString().toDoubleOrNull()
         val description = binding.editDescription.text.toString().trim()
         val spentDate = binding.editSpentDate.text.toString().trim()
-        val concatenatedName=fullName
+        val concatenatedName = fullName
 
         if (userName.isEmpty() || splitAmount == null || description.isEmpty() || spentDate.isEmpty()) {
-
             Toast.makeText(context, "Please fill all the fields", Toast.LENGTH_SHORT).show()
             return
         }
@@ -165,13 +190,11 @@ class SplitshareFragment : Fragment() {
                 binding.editSpentDate.text.clear()
             }
             .addOnFailureListener { e ->
-
                 Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-
     }
 }
