@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -55,11 +56,14 @@ class ActivityFragment : Fragment() {
         binding.fabAdd.setOnClickListener {
             findNavController().navigate(ActivityFragmentDirections.actionNavigationActivityToAddExpenseFragment())
         }
-        binding.btnTransactions.setOnClickListener{
+        binding.btnTransactions.setOnClickListener {
             findNavController().navigate(ActivityFragmentDirections.actionNavigationActivityToExpenseStatistics())
         }
-        binding.btnLimit.setOnClickListener{
+        binding.btnLimit.setOnClickListener {
             findNavController().navigate(ActivityFragmentDirections.actionNavigationActivityToSetExpenseFragment())
+        }
+        binding.btnGoal.setOnClickListener{
+            findNavController().navigate(ActivityFragmentDirections.actionNavigationActivityToSetGoalFragment())
         }
 
         loadTotalExpense()
@@ -71,6 +75,7 @@ class ActivityFragment : Fragment() {
         loadTotalExpense()
         loadExpenseDataFromFirebase()
     }
+
     private fun loadExpenseDataFromFirebase() {
         val userEmail = AppData.email
         val expenseRecyclerList: ArrayList<expensecard> = arrayListOf()
@@ -138,39 +143,68 @@ class ActivityFragment : Fragment() {
         val userEmail = AppData.email
         val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+        var monthlyLimit = 0.0
 
-        db.collection("user_expenses")
+        // Fetch the expense limit
+        db.collection("expense_limit")
             .whereEqualTo("email", userEmail)
-            .addSnapshotListener { snapshots, error ->
-                if (error != null) {
-                    Log.e("ActivityFragment", "Listen failed.", error)
-                    return@addSnapshotListener
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    val document = querySnapshot.documents[0]
+                    val monthlyLimitString = document.getString("monthlyLimit") ?: "0"
+                    monthlyLimit = monthlyLimitString.toDoubleOrNull() ?: 0.0
                 }
 
-                var totalExpense = 0.0
-                if (snapshots != null && !snapshots.isEmpty) {
-                    for (document in snapshots.documents) {
-                        val expenseString = document.getString("amount")
-                        val transactionDate = document.getString("date") ?: "N/A"
-                        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-                        val date = dateFormat.parse(transactionDate)
-                        if (date != null) {
-                            val calendar = Calendar.getInstance()
-                            calendar.time = date
-                            val expenseMonth = calendar.get(Calendar.MONTH)
-                            val expenseYear = calendar.get(Calendar.YEAR)
+                // Fetch the user's expenses
+                db.collection("user_expenses")
+                    .whereEqualTo("email", userEmail)
+                    .addSnapshotListener { snapshots, error ->
+                        if (error != null) {
+                            Log.e("ActivityFragment", "Listen failed.", error)
+                            return@addSnapshotListener
+                        }
 
-                            if (expenseMonth == currentMonth && expenseYear == currentYear) {
-                                val expense = expenseString?.toDoubleOrNull() ?: 0.0
-                                totalExpense += expense
+                        var totalExpense = 0.0
+                        if (snapshots != null && !snapshots.isEmpty) {
+                            for (document in snapshots.documents) {
+                                val expenseString = document.getString("amount")
+                                val transactionDate = document.getString("date") ?: "N/A"
+                                val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                                val date = dateFormat.parse(transactionDate)
+
+                                if (date != null) {
+                                    val calendar = Calendar.getInstance()
+                                    calendar.time = date
+                                    val expenseMonth = calendar.get(Calendar.MONTH)
+                                    val expenseYear = calendar.get(Calendar.YEAR)
+
+                                    if (expenseMonth == currentMonth && expenseYear == currentYear) {
+                                        val expense = expenseString?.toDoubleOrNull() ?: 0.0
+                                        totalExpense += expense
+                                    }
+                                }
                             }
                         }
-                    }
-                }
 
-                val formattedTotal = String.format("$%.2f", totalExpense)
-                binding.spendSoFarText.text = "Amount Spent this Month\n$formattedTotal"
-                Log.d("ActivityFragment", "Total Expense Updated: $formattedTotal")
+                        val formattedTotal = String.format("$%.2f", totalExpense)
+                        binding.spendSoFarText.text = "Amount Spent this Month\n$formattedTotal"
+                        Log.d("ActivityFragment", "Total Expense Updated: $formattedTotal")
+
+                        if (totalExpense > monthlyLimit) {
+                            showExpenseLimitExceededNotification()
+                        }
+                    }
             }
+            .addOnFailureListener { exception ->
+                Log.e("ActivityFragment", "Failed to fetch expense limit.", exception)
+            }
+    }
+    private fun showExpenseLimitExceededNotification(){
+        val builder=AlertDialog.Builder(requireContext())
+        builder.setTitle("Expense  Limit Exceeded")
+        builder.setMessage("You have crossed your monthly expense limit.")
+        builder.setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+        builder.create().show()
     }
 }
