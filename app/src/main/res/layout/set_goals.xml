@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <!-- Title TextView -->
     <TextView
         android:id="@+id/titleText"
         android:layout_width="wrap_content"
@@ -37,12 +36,11 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Goal Name Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/goalName1"
@@ -60,12 +58,11 @@
                     android:hint="Enter goal" />
             </LinearLayout>
 
-            <!-- Total Amount Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/totalAmount1"
@@ -82,12 +79,11 @@
                     android:hint="Enter amount" />
             </LinearLayout>
 
-            <!-- Amount Saved Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/amountSaved1"
@@ -104,12 +100,11 @@
                     android:hint="Enter saved" />
             </LinearLayout>
 
-            <!-- Remaining Amount Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/remainingAmount1"
@@ -125,10 +120,43 @@
                     android:layout_height="wrap_content"
                     android:hint="Enter remaining" />
             </LinearLayout>
+
+            <!-- Button layout -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="space_between"
+                android:layout_marginTop="8dp">
+
+                <Button
+                    android:id="@+id/btnSetGoal1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+
+                    android:text="Set \nGoal" />
+
+                <Button
+                    android:id="@+id/btnEditGoal1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:text="Edit Goal" />
+
+                <Button
+                    android:id="@+id/btnDeleteGoal1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:text="Delete Goal" />
+            </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Second CardView with MarginTop for spacing -->
+    
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView2"
         android:layout_width="0dp"
@@ -146,12 +174,11 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Goal Name Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/goalName2"
@@ -169,12 +196,11 @@
                     android:hint="Enter goal" />
             </LinearLayout>
 
-            <!-- Total Amount Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/totalAmount2"
@@ -191,12 +217,11 @@
                     android:hint="Enter amount" />
             </LinearLayout>
 
-            <!-- Amount Saved Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/amountSaved2"
@@ -213,12 +238,11 @@
                     android:hint="Enter saved" />
             </LinearLayout>
 
-            <!-- Remaining Amount Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/remainingAmount2"
@@ -233,6 +257,37 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="Enter remaining" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+
+                <Button
+                    android:id="@+id/btnSetGoal2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Set \nGoal" />
+
+                <Button
+                    android:id="@+id/btnEditGoal2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:text="Edit Goal" />
+
+                <Button
+                    android:id="@+id/btnDeleteGoal2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:text="Delete Goal" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

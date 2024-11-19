@@ -21,6 +21,9 @@
             android:id="@+id/action_navigation_activity_to_setExpenseFragment"
             app:destination="@id/setExpenseFragment"
             tools:layout="@layout/set_expense"/>
+        <action
+            android:id="@+id/action_navigation_activity_to_setGoalFragment"
+            app:destination="@id/setGoalFragment" />
     </fragment>
 
     <fragment
@@ -62,6 +65,15 @@
         android:label="SetExpenseFragment" >
         <action
             android:id="@+id/action_setExpenseFragment_to_navigation_activity"
+            app:destination="@id/navigation_activity" />
+    </fragment>
+    <fragment
+        android:id="@+id/setGoalFragment"
+        android:name="com.unh.expense_tracker.ui.activity.SetGoalFragment"
+        android:label="SetGoalFragment"
+        tools:layout="@layout/set_goals">
+        <action
+            android:id="@+id/action_setGoalFragment_to_navigation_activity"
             app:destination="@id/navigation_activity" />
     </fragment>
 
