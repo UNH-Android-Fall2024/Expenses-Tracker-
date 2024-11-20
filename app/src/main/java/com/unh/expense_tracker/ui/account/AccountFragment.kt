@@ -44,6 +44,9 @@ class AccountFragment : Fragment() {
         binding.spentStatistics.setOnClickListener{
             findNavController().navigate(AccountFragmentDirections.actionNavigationAccountToExpenseStatistics())
         }
+        binding.recurringExpenses.setOnClickListener{
+            findNavController().navigate(AccountFragmentDirections.actionNavigationAccountToRecurringExpenseFragment())
+        }
     }
 
     private fun loadUserDetails() {

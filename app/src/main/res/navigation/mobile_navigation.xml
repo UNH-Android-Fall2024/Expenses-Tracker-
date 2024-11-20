@@ -40,6 +40,10 @@
         <action
             android:id="@+id/action_navigation_account_to_expenseStatistics"
             app:destination="@id/expenseStatistics" />
+        <action
+            android:id="@+id/action_navigation_account_to_recurringExpenseFragment"
+            app:destination="@id/recurringExpenseFragment"
+            tools:layout="@layout/fragment_recurring_expense" />
     </fragment>
     <fragment
         android:id="@+id/addExpenseFragment"
@@ -75,6 +79,14 @@
         <action
             android:id="@+id/action_setGoalFragment_to_navigation_activity"
             app:destination="@id/navigation_activity" />
+    </fragment>
+    <fragment
+        android:id="@+id/recurringExpenseFragment"
+        android:name="com.unh.expense_tracker.ui.account.RecurringExpenseFragment"
+        android:label="RecurringExpenseFragment" >
+        <action
+            android:id="@+id/action_recurringExpenseFragment_to_navigation_account"
+            app:destination="@id/navigation_account" />
     </fragment>
 
 </navigation>
