@@ -1,7 +1,14 @@
 package com.unh.expense_tracker.ui.activity
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +16,11 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -19,6 +31,8 @@ import java.util.Locale
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.unh.expense_tracker.AppData
+import com.unh.expense_tracker.R
+import java.util.jar.Manifest
 
 class ActivityFragment : Fragment() {
 
@@ -66,8 +80,8 @@ class ActivityFragment : Fragment() {
             findNavController().navigate(ActivityFragmentDirections.actionNavigationActivityToSetGoalFragment())
         }
 
-        loadTotalExpense()
-        loadExpenseDataFromFirebase()
+        //loadTotalExpense()
+        //loadExpenseDataFromFirebase()
     }
 
     override fun onResume() {
@@ -191,9 +205,9 @@ class ActivityFragment : Fragment() {
                         binding.spendSoFarText.text = "Amount Spent this Month\n$formattedTotal"
                         Log.d("ActivityFragment", "Total Expense Updated: $formattedTotal")
 
-                        if (totalExpense > monthlyLimit) {
-                            showExpenseLimitExceededNotification()
-                        }
+                     if (totalExpense > monthlyLimit) {
+                           showExpenseLimitExceededNotification()
+                       }
                     }
             }
             .addOnFailureListener { exception ->
@@ -201,10 +215,63 @@ class ActivityFragment : Fragment() {
             }
     }
     private fun showExpenseLimitExceededNotification(){
-        val builder=AlertDialog.Builder(requireContext())
-        builder.setTitle("Expense  Limit Exceeded")
-        builder.setMessage("You have crossed your monthly expense limit.")
-        builder.setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
-        builder.create().show()
+        createNotificationChannel()
+
+        val intent = Intent(requireContext(), requireActivity()::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(requireContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        var builder = NotificationCompat.Builder(requireContext(), "CHANNEL_ID")
+            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setContentTitle("Limit Exceeded")
+            .setContentText("Your expenses has crossed the limit")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+
+        with(NotificationManagerCompat.from(requireContext())) {
+            if (ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    android.Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // TODO: Consider calling
+                // ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                // public fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
+                //                                        grantResults: IntArray)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+                    1001
+                )
+            }
+            // notificationId is a unique int for each notification that you must define.
+            notify(101, builder.build())
+        }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.w("test", "$requestCode $resultCode")
+    }
+    private fun createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is not in the Support Library.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = ("channel_name")
+            val descriptionText ="Desc"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel("CHANNEL_ID", name, importance).apply {
+                description = descriptionText
+            }
+            // Register the channel with the system.
+            val notificationManager: NotificationManager = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
 }

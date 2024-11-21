@@ -1,13 +1,18 @@
 package com.unh.expense_tracker
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.unh.expense_tracker.databinding.ActivityMainBinding
+import java.util.concurrent.Executor
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,13 +38,58 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.buttonLogin.setOnClickListener {
-            logintoapp()
+            val email = binding.editTextUserName.text.toString().trim()
+            val password = binding.editTextPassword.text.toString().trim()
+            logintoapp(email,password)
+        }
+        binding.buttonFingerprintLogin.setOnClickListener{
+            authenticateWithBiometric()
         }
     }
+    private fun authenticateWithBiometric() {
+        val biometricManager = BiometricManager.from(this)
+        if (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG) != BiometricManager.BIOMETRIC_SUCCESS) {
+            Toast.makeText(this, "Biometric authentication is not available", Toast.LENGTH_SHORT).show()
+            return
+        }
 
-    private fun logintoapp() {
-        val email = binding.editTextUserName.text.toString().trim()
-        val password = binding.editTextPassword.text.toString().trim()
+        val executor: Executor = ContextCompat.getMainExecutor(this)
+        val biometricPrompt = BiometricPrompt(this, executor, object : BiometricPrompt.AuthenticationCallback() {
+            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                super.onAuthenticationSucceeded(result)
+                Toast.makeText(this@MainActivity, "Biometric Authentication Successful", Toast.LENGTH_SHORT).show()
+                val sharedPreferences = getSharedPreferences("UserCredentials", Context.MODE_PRIVATE)
+                val savedEmail = sharedPreferences.getString("email", null)
+                val savedPassword = sharedPreferences.getString("password", null)
+                if (savedEmail != null && savedPassword != null) {
+                    logintoapp(savedEmail, savedPassword)
+                    }
+            }
+
+            override fun onAuthenticationFailed() {
+                super.onAuthenticationFailed()
+                Toast.makeText(this@MainActivity, "Authentication failed", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+            .setTitle("Login with Biometric")
+            .setSubtitle("Authenticate using fingerprint or face recognition")
+            .setNegativeButtonText("Cancel")
+            .build()
+
+        biometricPrompt.authenticate(promptInfo)
+    }
+    private fun saveUserlogindetails(email: String, password: String) {
+        val sharedPreferences = getSharedPreferences("UserCredentials", Context.MODE_PRIVATE)
+        val editpref = sharedPreferences.edit()
+        editpref.putString("email", email)
+        editpref.putString("password", password)
+        editpref.apply()
+    }
+    private fun logintoapp(email:String,password:String) {
+        //val email = binding.editTextUserName.text.toString().trim()
+        //val password = binding.editTextPassword.text.toString().trim()
 
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Please enter all the fields", Toast.LENGTH_SHORT).show()
@@ -49,6 +99,7 @@ class MainActivity : AppCompatActivity() {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    saveUserlogindetails(email,password)
                     Toast.makeText(this, "Logged in successfully", Toast.LENGTH_SHORT).show()
                     binding.editTextUserName.setText("")
                     binding.editTextPassword.setText("")
