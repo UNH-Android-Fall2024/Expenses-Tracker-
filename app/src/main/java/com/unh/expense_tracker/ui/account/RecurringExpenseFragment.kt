@@ -1,13 +1,13 @@
 package com.unh.expense_tracker.ui.account
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.core.app.NotificationCompat
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -17,8 +17,10 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.unh.expense_tracker.AppData
 import com.unh.expense_tracker.databinding.FragmentRecurringExpenseBinding
+import java.text.SimpleDateFormat
+import java.util.*
 
-class RecurringExpenseFragment :Fragment() {
+class RecurringExpenseFragment : Fragment() {
     private lateinit var binding: FragmentRecurringExpenseBinding
     private val db = Firebase.firestore
     private lateinit var mRecyclerView: RecyclerView
@@ -48,12 +50,13 @@ class RecurringExpenseFragment :Fragment() {
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
+
     override fun onResume() {
         super.onResume()
-        loadrecuexpfromfirebase()
+        loadRecurringExpensesFromFirebase()
     }
 
-    private fun loadrecuexpfromfirebase() {
+    private fun loadRecurringExpensesFromFirebase() {
         val userEmail = AppData.email
         val expenseRecyclerList: ArrayList<recurringexpensecard> = arrayListOf()
 
@@ -69,25 +72,83 @@ class RecurringExpenseFragment :Fragment() {
             .get()
             .addOnSuccessListener { documents ->
                 expenseRecyclerList.clear()
+                var nearestExpense: Pair<String, Int>? = null
+                var earliestDueDate: Date? = null
+
                 for (document in documents) {
                     val category = document.getString("category") ?: "N/A"
                     val amount = document.getString("amount") ?: "N/A"
                     val description = document.getString("description") ?: "N/A"
-                    val date = document.getString("date") ?: "N/A"
+                    val lastSpentDate = document.getString("date") ?: "N/A"
+                    val recurrencePeriod = document.getLong("recurrence_period")?.toInt() ?: 30
+
+                    // Calculate next due date
+                    val nextDueDate = calculateNextDueDate(lastSpentDate, recurrencePeriod)
+                    if (nextDueDate != null) {
+                        if (earliestDueDate == null || nextDueDate.before(earliestDueDate)) {
+                            earliestDueDate = nextDueDate
+                            val today = Calendar.getInstance().time
+                            val daysUntilDue = ((nextDueDate.time - today.time) / (1000 * 60 * 60 * 24)).toInt()
+                            nearestExpense = Pair(category, daysUntilDue)
+                        }
+                    }
+
                     expenseRecyclerList.add(
                         recurringexpensecard(
                             "Name: $category",
                             "Amount: $amount",
                             "Description: $description",
-                            "Last Spent Date: $date"
+                            "Last Spent Date: $lastSpentDate"
                         )
                     )
                 }
+
+                // Notify user for the nearest due expense
+                nearestExpense?.let {
+                    sendNotification(it.first, it.second)
+                }
+
                 recurringExpenseAdapter.notifyDataSetChanged()
             }
             .addOnFailureListener { exception ->
                 Log.e("RecurringExpenseFragment", "Error fetching data", exception)
             }
+    }
 
+    private fun calculateNextDueDate(lastSpentDate: String, recurrencePeriod: Int): Date? {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        return try {
+            val date = dateFormat.parse(lastSpentDate)
+            val calendar = Calendar.getInstance()
+            calendar.time = date!!
+            calendar.add(Calendar.DAY_OF_YEAR, recurrencePeriod) // Add recurrence period in days
+            calendar.time
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    private fun sendNotification(expenseName: String, daysUntilDue: Int) {
+        val notificationManager =
+            requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val channelId = "recurring_expenses_channel"
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                channelId,
+                "Recurring Expenses Notifications",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val notification = NotificationCompat.Builder(requireContext(), channelId)
+            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setContentTitle("Upcoming Expense Due")
+            .setContentText("$expenseName is due in ${if (daysUntilDue == 0) "today" else "$daysUntilDue days"}.")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .build()
+
+        notificationManager.notify(expenseName.hashCode(), notification)
     }
 }
