@@ -38,6 +38,15 @@
         android:layout_below="@+id/text_view3"
         android:textSize="18sp"
         android:textStyle="bold"/>
+    <Button
+        android:id="@+id/buttonDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="8dp"
+        android:text="Delete\nExpense" />
 </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

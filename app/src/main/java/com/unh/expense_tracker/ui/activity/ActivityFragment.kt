@@ -15,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -152,7 +153,31 @@ class ActivityFragment : Fragment() {
                 expenseAdapter.notifyDataSetChanged()
             }
     }
-
+    fun deleteExpense(expenseitem :expensecard){
+        val userEmail = AppData.email
+        db.collection("user_expenses")
+            .whereEqualTo("email", userEmail)
+            .whereEqualTo("amount", expenseitem.text1.removePrefix("Amount Spent: "))
+            .whereEqualTo("date", expenseitem.text2.removePrefix("Transaction Date: ").toLongOrNull())
+            .whereEqualTo("category", expenseitem.text3.removePrefix("Category: "))
+            .whereEqualTo("description", expenseitem.text4.removePrefix("Description: "))
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    db.collection("user_expenses").document(document.id).delete()
+                        .addOnSuccessListener {
+                            Toast.makeText(context, "Expense Deleted Successfully.", Toast.LENGTH_SHORT).show()
+                            loadExpenseDataFromFirebase()
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
+                }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
     private fun loadTotalExpense() {
         val userEmail = AppData.email
         val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
