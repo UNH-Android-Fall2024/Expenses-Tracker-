@@ -155,10 +155,10 @@ class ActivityFragment : Fragment() {
     }
     fun deleteExpense(expenseitem :expensecard){
         val userEmail = AppData.email
+        //Log.d("deleteexp","inside deleteexpense function")
         db.collection("user_expenses")
             .whereEqualTo("email", userEmail)
             .whereEqualTo("amount", expenseitem.text1.removePrefix("Amount Spent: "))
-            .whereEqualTo("date", expenseitem.text2.removePrefix("Transaction Date: ").toLongOrNull())
             .whereEqualTo("category", expenseitem.text3.removePrefix("Category: "))
             .whereEqualTo("description", expenseitem.text4.removePrefix("Description: "))
             .get()
@@ -195,7 +195,7 @@ class ActivityFragment : Fragment() {
                     monthlyLimit = monthlyLimitString.toDoubleOrNull() ?: 0.0
                 }
 
-                // Fetch the user's expenses
+
                 db.collection("user_expenses")
                     .whereEqualTo("email", userEmail)
                     .addSnapshotListener { snapshots, error ->

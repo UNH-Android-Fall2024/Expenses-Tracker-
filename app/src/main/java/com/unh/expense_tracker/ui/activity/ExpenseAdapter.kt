@@ -43,6 +43,7 @@ class ExpenseAdapter(
         //}
         holder.deletebutt.setOnClickListener {
            fragment.deleteExpense(currentItem)
+           // Log.d("funcdelete","inside deletebutt holder")
         }
     }
 
