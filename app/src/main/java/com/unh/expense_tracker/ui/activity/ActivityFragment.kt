@@ -135,7 +135,6 @@ class ActivityFragment : Fragment() {
                         val expenseMonth = calendar.get(Calendar.MONTH)
                         val expenseYear = calendar.get(Calendar.YEAR)
 
-                        // Check if the expense date matches the current month and year
                         if (expenseMonth == currentMonth && expenseYear == currentYear) {
                             expenseRecyclerList.add(
                                 expensecard(
@@ -182,25 +181,24 @@ class ActivityFragment : Fragment() {
         val userEmail = AppData.email
         val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        var monthlyLimit = 0.0
 
-        // Fetch the expense limit
         db.collection("expense_limit")
             .whereEqualTo("email", userEmail)
             .get()
             .addOnSuccessListener { querySnapshot ->
+                var monthlyLimit: Double? = null
+
                 if (!querySnapshot.isEmpty) {
                     val document = querySnapshot.documents[0]
                     val monthlyLimitString = document.getString("monthlyLimit") ?: "0"
-                    monthlyLimit = monthlyLimitString.toDoubleOrNull() ?: 0.0
+                    monthlyLimit = monthlyLimitString.toDoubleOrNull()
                 }
-
 
                 db.collection("user_expenses")
                     .whereEqualTo("email", userEmail)
                     .addSnapshotListener { snapshots, error ->
                         if (error != null) {
-                            Log.e("ActivityFragment", "Listen failed.", error)
+                            Log.e("ActivityFragment", "Error fetching user expenses.", error)
                             return@addSnapshotListener
                         }
 
@@ -228,17 +226,17 @@ class ActivityFragment : Fragment() {
 
                         val formattedTotal = String.format("$%.2f", totalExpense)
                         binding.spendSoFarText.text = "Amount Spent this Month\n$formattedTotal"
-                        Log.d("ActivityFragment", "Total Expense Updated: $formattedTotal")
 
-                     if (totalExpense > monthlyLimit) {
-                           showExpenseLimitExceededNotification()
-                       }
+                        if (monthlyLimit != null && totalExpense > monthlyLimit) {
+                            showExpenseLimitExceededNotification()
+                        }
                     }
             }
             .addOnFailureListener { exception ->
                 Log.e("ActivityFragment", "Failed to fetch expense limit.", exception)
             }
     }
+
     private fun showExpenseLimitExceededNotification(){
         createNotificationChannel()
 
