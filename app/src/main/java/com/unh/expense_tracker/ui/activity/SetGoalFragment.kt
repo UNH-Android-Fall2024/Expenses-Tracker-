@@ -166,7 +166,7 @@ class SetGoalFragment : Fragment() {
                     Toast.makeText(requireContext(), "Goal '$goalName' updated successfully!", Toast.LENGTH_SHORT).show()
                     disableFields(goalNumber)
                     if (remainingAmount == 0.0) {
-                        notifyGoalAchieved(goalName) 
+                        notifyGoalAchieved(goalName)
                     }
                 }
                 .addOnFailureListener { e ->

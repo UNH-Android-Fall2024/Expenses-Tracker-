@@ -13,14 +13,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="136dp"
         android:fontFamily="sans-serif-condensed-medium"
         android:gravity="center"
         android:text="@string/expense_tracker_app"
-        android:textColor="@color/white"
+        android:textColor="@color/app_theme_light"
         android:textSize="36sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,33 +49,36 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="36dp"
-                android:background="@color/edit_text_background"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:background="@color/material_dynamic_neutral95"
                 android:drawableStart="@drawable/baseline_email_24"
-                android:hint="Email or UserName"
+                android:hint="  Email "
                 android:inputType="text"
                 android:padding="8dp"
                 android:singleLine="true"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.473"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
 
             <EditText
                 android:id="@+id/editTextPassword"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="36dp"
-                android:background="@color/edit_text_background"
-                android:drawableLeft="@drawable/baseline_lock_24"
-                android:hint="Password"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:background="@color/material_dynamic_neutral95"
+                android:drawableStart="@drawable/baseline_lock_24"
+                android:hint=" Password"
                 android:inputType="textPassword"
                 android:padding="8dp"
                 android:singleLine="true"
-
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/editTextUserName" />
+
 
             <TextView
                 android:id="@+id/textViewForgotPassword"
@@ -91,6 +95,8 @@
                 android:id="@+id/buttonLogin"
                 android:layout_width="0dp"
                 android:layout_height="60dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
                 android:text="@string/login"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -98,6 +104,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textViewForgotPassword"
                 app:layout_constraintVertical_bias="0.147" />
+
 
             <TextView
                 android:id="@+id/textViewCreateAccount"
@@ -116,6 +123,8 @@
                 android:id="@+id/buttonFingerprintLogin"
                 android:layout_width="0dp"
                 android:layout_height="60dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
                 android:layout_marginTop="60dp"
                 android:backgroundTint="@color/app_theme"
                 android:text="Login with Fingerprint"
@@ -124,6 +133,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/buttonLogin" />
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
