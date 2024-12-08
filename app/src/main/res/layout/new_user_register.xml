@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="88dp"
         android:fontFamily="sans-serif-condensed-medium"
         android:gravity="center"
         android:text="@string/expense_tracker_app_newregister"
@@ -26,7 +26,7 @@
         android:textSize="36sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.404"
+        app:layout_constraintHorizontal_bias="0.437"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -47,7 +47,9 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="32dp"
-                android:background="@color/edit_text_background"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:background="@color/material_dynamic_neutral95"
                 android:hint="@string/first_name"
                 android:inputType="text"
                 android:padding="8dp"
@@ -57,12 +59,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+
             <EditText
                 android:id="@+id/editTextLastName"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="28dp"
-                android:background="@color/edit_text_background"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:background="@color/material_dynamic_neutral95"
                 android:hint="Last Name"
                 android:inputType="text"
                 android:padding="8dp"
@@ -72,13 +77,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/editTextFirstName" />
 
+
             <EditText
                 android:id="@+id/editTextEmail"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="36dp"
-                android:background="@color/edit_text_background"
-                android:hint="Email ID"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:background="@color/material_dynamic_neutral95"
+                android:hint=" Email ID"
                 android:inputType="textEmailAddress"
                 android:drawableStart="@drawable/baseline_email_24"
                 android:padding="8dp"
@@ -88,12 +96,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/editTextLastName" />
 
+
             <EditText
                 android:id="@+id/editTextPassword"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="36dp"
-                android:background="@color/edit_text_background"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:background="@color/material_dynamic_neutral95"
                 android:drawableLeft="@drawable/baseline_lock_24"
                 android:hint="@string/password_Newuser"
                 android:inputType="textPassword"
@@ -104,12 +115,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/editTextEmail" />
 
+
             <EditText
                 android:id="@+id/editTextConfirmPassword"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="36dp"
-                android:background="@color/edit_text_background"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:background="@color/material_dynamic_neutral95"
                 android:drawableLeft="@drawable/baseline_lock_24"
                 android:hint="@string/confirm_password"
                 android:inputType="textPassword"
@@ -120,17 +134,21 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/editTextPassword" />
 
+
             <Button
                 android:id="@+id/button"
                 android:layout_width="0dp"
                 android:layout_height="60dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
                 android:text="Click to Create an Account"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editTextConfirmPassword"
-                app:layout_constraintVertical_bias="0.147"/>
+                app:layout_constraintVertical_bias="0.147" />
+
             <TextView
                 android:id="@+id/backtologin1"
                 android:layout_width="wrap_content"
