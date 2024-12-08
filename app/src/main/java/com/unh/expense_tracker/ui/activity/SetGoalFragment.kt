@@ -165,6 +165,9 @@ class SetGoalFragment : Fragment() {
                 .addOnSuccessListener {
                     Toast.makeText(requireContext(), "Goal '$goalName' updated successfully!", Toast.LENGTH_SHORT).show()
                     disableFields(goalNumber)
+                    if (remainingAmount == 0.0) {
+                        notifyGoalAchieved(goalName) 
+                    }
                 }
                 .addOnFailureListener { e ->
                     Toast.makeText(requireContext(), "Failed to update Goal '$goalName': ${e.message}", Toast.LENGTH_SHORT).show()
@@ -176,16 +179,16 @@ class SetGoalFragment : Fragment() {
                     Toast.makeText(requireContext(), "Goal '$goalName' saved successfully!", Toast.LENGTH_SHORT).show()
                     if (goalNumber == 1) goal1DocumentId = doc.id else goal2DocumentId = doc.id
                     disableFields(goalNumber)
+                    if (remainingAmount == 0.0) {
+                        notifyGoalAchieved(goalName)
+                    }
                 }
                 .addOnFailureListener { e ->
                     Toast.makeText(requireContext(), "Failed to save Goal '$goalName': ${e.message}", Toast.LENGTH_SHORT).show()
                 }
         }
-
-        if (remainingAmount == 0.0) {
-            notifyGoalAchieved(goalName)
-        }
     }
+
 
     private fun deleteGoalFromFirebase(goalNumber: Int) {
         val collectionName = if (goalNumber == 1) "Goalsetting1" else "Goalsetting2"
