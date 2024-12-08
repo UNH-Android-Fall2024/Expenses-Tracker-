@@ -306,16 +306,32 @@ class SetGoalFragment : Fragment() {
         val amountSaved = if (goalNumber == 1) binding.inputAmountSaved1.text.toString().toDoubleOrNull()
         else binding.inputAmountSaved2.text.toString().toDoubleOrNull()
 
-        val remainingAmount = if (totalAmount != null && amountSaved != null) {
-            totalAmount - amountSaved
-        } else {
-            null
+        if (totalAmount == null || amountSaved == null) {
+            // Clear remaining amount if either field is empty or invalid
+            if (goalNumber == 1) {
+                binding.inputRemainingAmount1.setText("")
+            } else {
+                binding.inputRemainingAmount2.setText("")
+            }
+            return
         }
 
+        if (amountSaved > totalAmount) {
+            Toast.makeText(requireContext(), "Amount Saved cannot be greater than Total Amount!", Toast.LENGTH_SHORT).show()
+            if (goalNumber == 1) {
+                binding.inputAmountSaved1.setText(totalAmount.toString())
+            } else {
+                binding.inputAmountSaved2.setText(totalAmount.toString())
+            }
+            return
+        }
+
+        val remainingAmount = totalAmount - amountSaved
+
         if (goalNumber == 1) {
-            binding.inputRemainingAmount1.setText(remainingAmount?.toString() ?: "")
+            binding.inputRemainingAmount1.setText(remainingAmount.toString())
         } else {
-            binding.inputRemainingAmount2.setText(remainingAmount?.toString() ?: "")
+            binding.inputRemainingAmount2.setText(remainingAmount.toString())
         }
 
         if (remainingAmount == 0.0) {
@@ -323,6 +339,7 @@ class SetGoalFragment : Fragment() {
             notifyGoalAchieved(goalName)
         }
     }
+
 
     private fun setupFieldListeners() {
         setupFieldListener(1)
