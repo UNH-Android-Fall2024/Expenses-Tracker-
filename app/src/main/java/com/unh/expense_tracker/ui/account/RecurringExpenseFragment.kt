@@ -75,6 +75,8 @@ class RecurringExpenseFragment : Fragment() {
                 var nearestExpense: Pair<String, Int>? = null
                 var earliestDueDate: Date? = null
 
+                val today = Calendar.getInstance().time
+
                 for (document in documents) {
                     val category = document.getString("category") ?: "N/A"
                     val amount = document.getString("amount") ?: "N/A"
@@ -84,23 +86,23 @@ class RecurringExpenseFragment : Fragment() {
 
                     // Calculate next due date
                     val nextDueDate = calculateNextDueDate(lastSpentDate, recurrencePeriod)
-                    if (nextDueDate != null) {
+                    if (nextDueDate != null && !nextDueDate.before(today)) {
+                        // Include only if nextDueDate is today or in the future
                         if (earliestDueDate == null || nextDueDate.before(earliestDueDate)) {
                             earliestDueDate = nextDueDate
-                            val today = Calendar.getInstance().time
                             val daysUntilDue = ((nextDueDate.time - today.time) / (1000 * 60 * 60 * 24)).toInt()
                             nearestExpense = Pair(category, daysUntilDue)
                         }
-                    }
 
-                    expenseRecyclerList.add(
-                        recurringexpensecard(
-                            "Name: $category",
-                            "Amount: $amount",
-                            "Description: $description",
-                            "Last Spent Date: $lastSpentDate"
+                        expenseRecyclerList.add(
+                            recurringexpensecard(
+                                "Name: $category",
+                                "Amount: $amount",
+                                "Description: $description",
+                                "Last Spent Date: $lastSpentDate"
+                            )
                         )
-                    )
+                    }
                 }
 
                 // Notify user for the nearest due expense
