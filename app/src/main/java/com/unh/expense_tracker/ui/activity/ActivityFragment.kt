@@ -109,6 +109,10 @@ class ActivityFragment : Fragment() {
         val expenseAdapter = ExpenseAdapter(expenseRecyclerList, this)
         mRecyclerView.adapter = expenseAdapter
 
+        val noExpensesImage = binding.emptyStateImage
+        val noExpensesText = binding.noexpenseText
+        val noExpenseTextView = binding.noExpenseText
+
         db.collection("user_expenses")
             .whereEqualTo("email", userEmail)
             .addSnapshotListener { snapshots, error ->
@@ -117,14 +121,22 @@ class ActivityFragment : Fragment() {
                     return@addSnapshotListener
                 }
 
+                expenseRecyclerList.clear()
+
                 if (snapshots == null || snapshots.isEmpty) {
                     Log.d("ActivityFragment", "No data available for user: $userEmail")
+                    noExpensesImage.visibility = View.VISIBLE
+                    noExpensesText.visibility = View.VISIBLE
+                    mRecyclerView.visibility = View.GONE
+
+                    noExpenseTextView.text = ""
                     return@addSnapshotListener
                 }
 
-                Log.d("ActivityFragment", "Data found for user: $userEmail with ${snapshots.size()} entries")
+                noExpensesImage.visibility = View.GONE
+                noExpensesText.visibility = View.GONE
+                mRecyclerView.visibility = View.VISIBLE
 
-                expenseRecyclerList.clear()
 
                 for (document in snapshots.documents) {
                     val amount = document.getString("amount") ?: "0"
@@ -155,8 +167,18 @@ class ActivityFragment : Fragment() {
 
                 Log.d("ActivityFragment", "RecyclerView updated with ${expenseRecyclerList.size} items")
                 expenseAdapter.notifyDataSetChanged()
+
+
+                if (expenseRecyclerList.isEmpty()) {
+                    noExpensesImage.visibility = View.VISIBLE
+                    noExpensesText.visibility = View.VISIBLE
+                    mRecyclerView.visibility = View.GONE
+                    noExpenseTextView.text = ""
+                }
             }
     }
+
+
     fun deleteExpense(expenseitem :expensecard){
         val userEmail = AppData.email
         //Log.d("deleteexp","inside deleteexpense function")
