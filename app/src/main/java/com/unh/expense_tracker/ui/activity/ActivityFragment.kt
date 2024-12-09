@@ -15,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
@@ -33,6 +34,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.unh.expense_tracker.AppData
 import com.unh.expense_tracker.R
+import java.util.Date
 import java.util.jar.Manifest
 
 class ActivityFragment : Fragment() {
@@ -56,9 +58,12 @@ class ActivityFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val currentDate = Calendar.getInstance().time
+        val noExpenseTextView: TextView = view.findViewById(R.id.no_expense_text)
         val dateFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
         val formattedDate = "Today, ${dateFormat.format(currentDate)}"
         binding.textCurrentDate.text = formattedDate
+        val currentMonth = SimpleDateFormat("MMMM", Locale.getDefault()).format(Date())
+        noExpenseTextView.text = "Expenses of the Month: $currentMonth"
 
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>("expense_added")
             ?.observe(viewLifecycleOwner) { result ->

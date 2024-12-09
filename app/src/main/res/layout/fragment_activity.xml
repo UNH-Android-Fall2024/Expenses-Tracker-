@@ -123,7 +123,7 @@
         android:id="@+id/no_expense_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Expenses of the Month"
+
         android:textStyle="bold"
         android:textSize="20sp"
         android:textColor="@color/darkergray"
