@@ -167,7 +167,7 @@ class AccountFragment : Fragment() {
                         val lastName = document.getString("lastName") ?: ""
                         val fullName = "$firstName $lastName"
                         Log.d("name", fullName)
-                        binding.name.text = fullName
+                        binding.name.text = "Hi,$fullName"
                         break
                     }
                 } else {
