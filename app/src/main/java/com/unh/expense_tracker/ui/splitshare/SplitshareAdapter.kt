@@ -12,15 +12,15 @@ class SplitshareAdapter(
     private val mChildList: ArrayList<splitsharecard>,
     private val fragment: SplitshareFragment
 ) : RecyclerView.Adapter<SplitshareAdapter.SplitshareViewHolder>() {
-
+// For split shares i have followed the procedure of what had taught in class
     inner class SplitshareViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val mTextView1: TextView = itemView.findViewById(R.id.text_view1)
         val mTextView2: TextView = itemView.findViewById(R.id.text_view2)
         val mTextView3: TextView = itemView.findViewById(R.id.text_view3)
         val mTextView4: TextView = itemView.findViewById(R.id.text_view4)
-        val paidButton: Button = itemView.findViewById(R.id.buttonPaid) // Added paidButton
+        val paidButton: Button = itemView.findViewById(R.id.buttonPaid)
     }
-
+// For split shares i have followed the procedure of what had taught in class
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SplitshareViewHolder {
         val itemView = LayoutInflater.from(parent.context)
             .inflate(R.layout.splits_shares, parent, false)
@@ -35,7 +35,7 @@ class SplitshareAdapter(
         holder.mTextView4.text = currentItem.text4
 
         holder.paidButton.setOnClickListener {
-         
+         //for delete the item in recycler list i took syntax from chatgpt
             fragment.deleteSplit(currentItem)
         }
     }

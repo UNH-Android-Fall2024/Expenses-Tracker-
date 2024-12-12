@@ -99,10 +99,10 @@ class ActivityFragment : Fragment() {
     private fun loadExpenseDataFromFirebase() {
         val userEmail = AppData.email
         val expenseRecyclerList: ArrayList<expensecard> = arrayListOf()
-
+//https://findnerd.com/list/view/How-to-get-Current-month-namedate-and-year-in-android/29057/
         val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-
+//// For split shares i have followed the procedure of what had taught in class
         mRecyclerView = binding.recyclerExpenseChild
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -115,6 +115,8 @@ class ActivityFragment : Fragment() {
 
         db.collection("user_expenses")
             .whereEqualTo("email", userEmail)
+            //For usasge of snapshots https://firebase.google.com/docs/firestore/query-data/listen
+            //And for this syntax i used chatgpt for error resolving
             .addSnapshotListener { snapshots, error ->
                 if (error != null) {
                     Log.e("ActivityFragment", "Error loading expenses", error)
@@ -132,7 +134,7 @@ class ActivityFragment : Fragment() {
                     noExpenseTextView.text = ""
                     return@addSnapshotListener
                 }
-
+           //this synatx i took from chatgpt
                 noExpensesImage.visibility = View.GONE
                 noExpensesText.visibility = View.GONE
                 mRecyclerView.visibility = View.VISIBLE
@@ -188,6 +190,7 @@ class ActivityFragment : Fragment() {
             .whereEqualTo("category", expenseitem.text3.removePrefix("Category: "))
             .whereEqualTo("description", expenseitem.text4.removePrefix("Description: "))
             .get()
+            //Use chatgpt for synatx and error resolving
             .addOnSuccessListener { documents ->
                 for (document in documents) {
                     db.collection("user_expenses").document(document.id).delete()
@@ -278,7 +281,7 @@ class ActivityFragment : Fragment() {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
-
+//https://developer.android.com/develop/ui/views/notifications/build-notification
         with(NotificationManagerCompat.from(requireContext())) {
             if (ActivityCompat.checkSelfPermission(
                     requireContext(),
@@ -308,6 +311,7 @@ class ActivityFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         Log.w("test", "$requestCode $resultCode")
     }
+    //https://developer.android.com/develop/ui/views/notifications/build-notification
     private fun createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is not in the Support Library.

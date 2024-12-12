@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.25" />
-
+    <!-- For initial design idea, we took reference from this YouTube video:
+        https://www.youtube.com/watch?v=k35UTi5u9Hc&t=191s -->
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
@@ -59,7 +60,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
+            <!-- For initial design idea, we took reference from this YouTube video:
+                https://www.youtube.com/watch?v=k35UTi5u9Hc&t=191s -->
             <EditText
                 android:id="@+id/editTextLastName"
                 android:layout_width="0dp"
@@ -76,7 +78,8 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/editTextFirstName" />
-
+            <!-- For initial design idea, we took reference from this YouTube video:
+                https://www.youtube.com/watch?v=k35UTi5u9Hc&t=191s -->
 
             <EditText
                 android:id="@+id/editTextEmail"
@@ -95,7 +98,8 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/editTextLastName" />
-
+            <!-- For initial design idea, we took reference from this YouTube video:
+                https://www.youtube.com/watch?v=k35UTi5u9Hc&t=191s -->
 
             <EditText
                 android:id="@+id/editTextPassword"
@@ -114,7 +118,8 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/editTextEmail" />
-
+            <!-- For initial design idea, we took reference from this YouTube video:
+                https://www.youtube.com/watch?v=k35UTi5u9Hc&t=191s -->
 
             <EditText
                 android:id="@+id/editTextConfirmPassword"

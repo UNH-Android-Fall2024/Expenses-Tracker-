@@ -52,7 +52,7 @@ class SetGoalFragment : Fragment() {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 // abstract method
             }
-
+            //https://www.droidcon.com/2023/08/27/menuprovider-api-android/?
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     android.R.id.home -> {
@@ -105,7 +105,7 @@ class SetGoalFragment : Fragment() {
                     Toast.makeText(requireContext(), "Failed to listen for data: ${e.message}", Toast.LENGTH_SHORT).show()
                     return@addSnapshotListener
                 }
-
+//For usasge of snapshots https://firebase.google.com/docs/firestore/query-data/listen
                 if (snapshots != null && !snapshots.isEmpty) {
                     val document = snapshots.documents[0]
                     val goalName = document.getString("goalName") ?: "Goal $goalNumber"
@@ -130,7 +130,7 @@ class SetGoalFragment : Fragment() {
                 }
             }
     }
-
+//Syntax from chatgpt how to approach this procedure
     private fun saveGoalToFirebase(goalNumber: Int) {
         val email = AppData.email ?: return
         val collectionName = if (goalNumber == 1) "Goalsetting1" else "Goalsetting2"
@@ -213,7 +213,7 @@ class SetGoalFragment : Fragment() {
 
     private fun notifyGoalAchieved(goalName: String) {
         createNotificationChannel()
-
+////https://developer.android.com/develop/ui/views/notifications/build-notification
         val intent = Intent(requireContext(), requireActivity()::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }

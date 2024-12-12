@@ -14,6 +14,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.unh.expense_tracker.databinding.ActivityMainBinding
 import java.util.concurrent.Executor
 
+//For some synatx like binding i have refered to the code discussedin class the link is below:
+// https://github.com/UNH-Android-Fall2024/IceBreaker_Sri-Harsha-Vardhan-Yendru
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -46,6 +48,8 @@ class MainActivity : AppCompatActivity() {
             authenticateWithBiometric()
         }
     }
+    //For biometric to get overview we used this reference https://developer.android.com/identity/sign-in/biometric-auth
+    //For the below syntax we used chatgpt
     private fun authenticateWithBiometric() {
         val biometricManager = BiometricManager.from(this)
         if (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG) != BiometricManager.BIOMETRIC_SUCCESS) {
@@ -68,10 +72,12 @@ class MainActivity : AppCompatActivity() {
 
             override fun onAuthenticationFailed() {
                 super.onAuthenticationFailed()
+                //Toast Messages:https://developer.android.com/guide/topics/ui/notifiers/toasts
                 Toast.makeText(this@MainActivity, "Authentication failed", Toast.LENGTH_SHORT).show()
             }
         })
-
+//For biometric to get overview we used this reference https://developer.android.com/identity/sign-in/biometric-auth
+    //For the below syntax we used chatgpt
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle("Login with Biometric")
             .setSubtitle("Authenticate using fingerprint or face recognition")
@@ -92,10 +98,11 @@ class MainActivity : AppCompatActivity() {
         //val password = binding.editTextPassword.text.toString().trim()
 
         if (email.isEmpty() || password.isEmpty()) {
+            //Toast Messages:https://developer.android.com/guide/topics/ui/notifiers/toasts
             Toast.makeText(this, "Please enter all the fields", Toast.LENGTH_SHORT).show()
             return
         }
-
+// For firebase authentication: https://firebase.google.com/docs/auth/android/password-auth
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -103,11 +110,13 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this, "Logged in successfully", Toast.LENGTH_SHORT).show()
                     binding.editTextUserName.setText("")
                     binding.editTextPassword.setText("")
+                    //for navigating to another activity https://sebhastian.com/android-putextra/?
                     val intent = Intent(this, MainActivity2::class.java)
                     intent.putExtra("email", email)
                     startActivity(intent)
                     Log.d("MainActivity2", "MainActivity2 started successfully")
                 } else {
+                    //Toast Messages:https://developer.android.com/guide/topics/ui/notifiers/toasts
                     Toast.makeText(this, "Login failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }

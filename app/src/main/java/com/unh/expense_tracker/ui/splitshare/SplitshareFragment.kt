@@ -46,7 +46,7 @@ class SplitshareFragment : Fragment() {
     private fun loadsplitsDataFromFirebase() {
         val userEmail = AppData.email
         val splitRecyclerList: ArrayList<splitsharecard> = arrayListOf()
-
+// For split shares i have followed the procedure of what had taught in class
         mRecyclerView = binding.recyclerSplitChild
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -60,6 +60,7 @@ class SplitshareFragment : Fragment() {
                     Log.e("SplitshareFragment", "Error loading expenses", error)
                     return@addSnapshotListener
                 }
+                //For usasge of snapshots https://firebase.google.com/docs/firestore/query-data/listen
                 if (snapshots == null || snapshots.isEmpty) {
                     Log.d("SplitshareFragment", "No data available for user: $userEmail")
                     return@addSnapshotListener
@@ -82,7 +83,7 @@ class SplitshareFragment : Fragment() {
                 splitshareAdapter.notifyDataSetChanged()
             }
     }
-
+// For split shares i have followed the procedure of what had taught in class
     fun deleteSplit(splitItem: splitsharecard) {
         val userEmail = AppData.email
 
@@ -109,7 +110,7 @@ class SplitshareFragment : Fragment() {
                 Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
-
+//https://tutorial.eyehunts.com/android/android-date-picker-dialog-example-kotlin/
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)

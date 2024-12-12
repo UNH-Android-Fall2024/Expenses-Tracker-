@@ -84,7 +84,7 @@ class AddExpenseFragment : Fragment() {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 // abstract method
             }
-
+            //https://www.droidcon.com/2023/08/27/menuprovider-api-android/?
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     android.R.id.home -> {
@@ -105,7 +105,7 @@ class AddExpenseFragment : Fragment() {
 
         val minDate = Calendar.getInstance()
         minDate.set(Calendar.DAY_OF_MONTH, 1)
-
+//https://developer.android.com/develop/ui/views/components/pickers
         val datePickerDialog = DatePickerDialog(
             requireContext(),
             { _, selectedYear, selectedMonth, selectedDay ->
@@ -136,6 +136,7 @@ class AddExpenseFragment : Fragment() {
         Log.d("AddExpenseFragment", "Email received: $email")
 
         if (description.isEmpty() || category.isEmpty() || date.isEmpty()) {
+            //Toast Messages:https://developer.android.com/guide/topics/ui/notifiers/toasts
             Toast.makeText(requireContext(), "Please fill in all fields.", Toast.LENGTH_SHORT).show()
             return
         }

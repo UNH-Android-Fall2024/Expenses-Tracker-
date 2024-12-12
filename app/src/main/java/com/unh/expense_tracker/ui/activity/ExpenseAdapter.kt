@@ -17,7 +17,7 @@ class ExpenseAdapter(
     private val fragment: ActivityFragment
 ) : RecyclerView.Adapter<ExpenseAdapter.ExpenseViewHolder>() {
 
-
+//For recycler view i followed the procedure of what had taught in class
     class ExpenseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val mTextView1: TextView = itemView.findViewById(R.id.text_view1)
         val mTextView2: TextView = itemView.findViewById(R.id.text_view2)

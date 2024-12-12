@@ -9,6 +9,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.unh.expense_tracker.databinding.PasswordResetBinding
 
+//For some synatx like binding i have refered to the code discussed in class the link is below:
+// https://github.com/UNH-Android-Fall2024/IceBreaker_Sri-Harsha-Vardhan-Yendru
 class PasswordReset : AppCompatActivity() {
     private lateinit var binding: PasswordResetBinding
 
@@ -34,10 +36,11 @@ class PasswordReset : AppCompatActivity() {
         val email = binding.editTextText.text.toString().trim()
 
         if (email.isEmpty()) {
+            //Toast Messages:https://developer.android.com/guide/topics/ui/notifiers/toasts
             Toast.makeText(this, "Please enter your email", Toast.LENGTH_SHORT).show()
             return
         }
-
+// For firebase authentication: https://firebase.google.com/docs/auth/android/password-auth
         Firebase.auth.sendPasswordResetEmail(email)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {

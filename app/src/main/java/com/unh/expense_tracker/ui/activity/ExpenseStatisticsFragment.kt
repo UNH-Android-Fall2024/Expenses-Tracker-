@@ -44,7 +44,7 @@ class ExpenseStatisticsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupBarChart()
         fetchExpenseData()
-
+//https://www.droidcon.com/2023/08/27/menuprovider-api-android/?
         requireActivity().addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {}
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -58,7 +58,7 @@ class ExpenseStatisticsFragment : Fragment() {
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
-
+//Syntax taken from chatgpt
     private fun setupBarChart() {
         binding.barChart.apply {
             description.isEnabled = false
@@ -131,7 +131,7 @@ class ExpenseStatisticsFragment : Fragment() {
         val entries = allCategories.mapIndexed { index, category ->
             BarEntry(index.toFloat(), categoryTotals[category] ?: 0f)
         }
-
+//https://www.truiton.com/2015/04/android-chart-example-mp-android-chart-library/
         val dataSet = BarDataSet(entries, "Expenses").apply {
             colors = listOf(
                 Color.parseColor("#FF6384"),

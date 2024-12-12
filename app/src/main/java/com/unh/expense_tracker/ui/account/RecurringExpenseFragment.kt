@@ -36,7 +36,7 @@ class RecurringExpenseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+//https://www.droidcon.com/2023/08/27/menuprovider-api-android/?
         requireActivity().addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {}
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -72,6 +72,7 @@ class RecurringExpenseFragment : Fragment() {
             .get()
             .addOnSuccessListener { documents ->
                 expenseRecyclerList.clear()
+                //Syntax from chatgpt
                 var nearestExpense: Pair<String, Int>? = null
                 var earliestDueDate: Date? = null
 
@@ -105,7 +106,7 @@ class RecurringExpenseFragment : Fragment() {
                     }
                 }
 
-                // Notify user for the nearest due expense
+
                 nearestExpense?.let {
                     sendNotification(it.first, it.second)
                 }
@@ -116,14 +117,14 @@ class RecurringExpenseFragment : Fragment() {
                 Log.e("RecurringExpenseFragment", "Error fetching data", exception)
             }
     }
-
+//Syntax taken from chatgpt
     private fun calculateNextDueDate(lastSpentDate: String, recurrencePeriod: Int): Date? {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         return try {
             val date = dateFormat.parse(lastSpentDate)
             val calendar = Calendar.getInstance()
             calendar.time = date!!
-            calendar.add(Calendar.DAY_OF_YEAR, recurrencePeriod) // Add recurrence period in days
+            calendar.add(Calendar.DAY_OF_YEAR, recurrencePeriod)
             calendar.time
         } catch (e: Exception) {
             null
@@ -143,7 +144,7 @@ class RecurringExpenseFragment : Fragment() {
             )
             notificationManager.createNotificationChannel(channel)
         }
-
+//https://developer.android.com/develop/ui/views/notifications/build-notification
         val notification = NotificationCompat.Builder(requireContext(), channelId)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContentTitle("Upcoming Expense Due")

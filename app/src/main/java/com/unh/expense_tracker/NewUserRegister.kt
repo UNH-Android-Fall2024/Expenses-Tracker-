@@ -14,6 +14,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.unh.expense_tracker.databinding.NewUserRegisterBinding
 
+//For some synatx like binding i have refered to the code discussedin class the link is below:
+// https://github.com/UNH-Android-Fall2024/IceBreaker_Sri-Harsha-Vardhan-Yendru
 class NewUserRegister : AppCompatActivity() {
     private lateinit var binding: NewUserRegisterBinding
     private val db = Firebase.firestore
@@ -53,7 +55,7 @@ class NewUserRegister : AppCompatActivity() {
             Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
             return
         }
-
+// For firebase authentication: https://firebase.google.com/docs/auth/android/password-auth
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -81,6 +83,7 @@ class NewUserRegister : AppCompatActivity() {
                             }
                             .addOnFailureListener { exception ->
                                 Log.w(TAG, "Error adding document", exception)
+                                //Toast Messages:https://developer.android.com/guide/topics/ui/notifiers/toasts
                                 Toast.makeText(this, "Error registering user", Toast.LENGTH_SHORT).show()
                             }
                     }
