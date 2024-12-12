@@ -21,6 +21,9 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.unh.expense_tracker.AppData
 import com.unh.expense_tracker.databinding.ExpenseStatisticsBinding
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 
 class ExpenseStatisticsFragment : Fragment() {
@@ -78,6 +81,7 @@ class ExpenseStatisticsFragment : Fragment() {
         }
     }
 
+
     private fun fetchExpenseData() {
         val userEmail = AppData.email
         val categoryTotals = mutableMapOf<String, Float>()
@@ -88,6 +92,11 @@ class ExpenseStatisticsFragment : Fragment() {
 
         allCategories.forEach { category -> categoryTotals[category] = 0f }
 
+
+        val calendar = Calendar.getInstance()
+        val currentMonth = calendar.get(Calendar.MONTH) + 1
+        val currentYear = calendar.get(Calendar.YEAR)
+
         db.collection("user_expenses")
             .whereEqualTo("email", userEmail)
             .addSnapshotListener { snapshots, error ->
@@ -97,14 +106,26 @@ class ExpenseStatisticsFragment : Fragment() {
                 }
 
                 snapshots?.documents?.forEach { document ->
+                    val dateStr = document.getString("date") ?: return@forEach
                     val category = document.getString("category") ?: return@forEach
                     val amount = document.getString("amount")?.toFloatOrNull() ?: 0f
-                    categoryTotals[category] = categoryTotals.getOrDefault(category, 0f) + amount
+
+                    val sdf = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+                    val date = sdf.parse(dateStr)
+
+                    val expenseCalendar = Calendar.getInstance().apply { time = date }
+                    val expenseMonth = expenseCalendar.get(Calendar.MONTH) + 1
+                    val expenseYear = expenseCalendar.get(Calendar.YEAR)
+
+                    if (expenseMonth == currentMonth && expenseYear == currentYear) {
+                        categoryTotals[category] = categoryTotals.getOrDefault(category, 0f) + amount
+                    }
                 }
 
                 updateBarChart(categoryTotals, allCategories)
             }
     }
+
 
     private fun updateBarChart(categoryTotals: Map<String, Float>, allCategories: List<String>) {
         val entries = allCategories.mapIndexed { index, category ->
