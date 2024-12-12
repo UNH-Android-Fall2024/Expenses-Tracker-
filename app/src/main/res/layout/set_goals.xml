@@ -10,7 +10,7 @@
         android:id="@+id/titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Financial Goal Planner"
+        android:text="@string/financial_goal_planner"
         android:textSize="26sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
@@ -46,7 +46,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Goal Name"
+                    android:text="@string/goal_name"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -54,7 +54,7 @@
                     android:id="@+id/inputGoalName1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Enter goal" />
+                    android:hint="@string/enter_goal" />
             </LinearLayout>
 
             <LinearLayout
@@ -68,7 +68,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Total Amount"
+                    android:text="@string/total_amount"
                     android:textSize="20sp" />
 
                 <EditText
@@ -134,7 +134,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
-                    android:text="Set \nGoal" />
+                    android:text="@string/set_ngoal" />
 
                 <Button
                     android:id="@+id/btnEditGoal1"

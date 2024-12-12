@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/text_view2"
-            android:text="Amount"
+            android:text="@string/amount"
             android:layout_below="@+id/text_view1"
             android:textSize="18sp"
             android:textStyle="bold"/>
@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/text_view3"
-            android:text="Transaction Date"
+            android:text="@string/transaction_date"
             android:layout_below="@+id/text_view2"
             android:textSize="18sp"
             android:textStyle="bold"/>
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/text_view4"
-            android:text="Description"
+            android:text="@string/descriptionsplit"
             android:layout_below="@+id/text_view3"
             android:textSize="18sp"
             android:textStyle="bold"/>
